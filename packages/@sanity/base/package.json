@@ -34,6 +34,8 @@
     "@sanity/observable": "0.140.0",
     "@sanity/preview": "0.140.12",
     "@sanity/schema": "0.140.17",
+    "@sanity/presence-store": "0.140.0",
+    "@sanity/reflector-client": "0.140.0",
     "@sanity/state-router": "0.140.0",
     "@sanity/validation": "0.140.17",
     "history": "^4.6.3",
