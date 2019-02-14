@@ -1,0 +1,9 @@
+{
+  "plugins": ["@sanity/base"],
+  "parts": [
+    {
+      "name": "part:@sanity/base/schema",
+      "path": "./fixtures/schema.js"
+    }
+  ]
+}

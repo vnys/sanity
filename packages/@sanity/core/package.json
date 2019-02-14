@@ -6,7 +6,8 @@
   "author": "Sanity.io <hello@sanity.io>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf lib"
+    "clean": "rimraf lib",
+    "test": "tap --node-arg --require --node-arg ./test/.setup.js test/**.test.js"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -20,7 +21,7 @@
     "core"
   ],
   "dependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
@@ -62,6 +63,11 @@
     "simple-get": "^3.0.2",
     "tar-fs": "^1.16.0",
     "terser": "^3.10.11"
+  },
+  "devDependencies": {
+    "@sanity/base": "0.140.8",
+    "@sanity/plugin-loader": "0.140.3",
+    "tap": "12.5.2"
   },
   "repository": {
     "type": "git",

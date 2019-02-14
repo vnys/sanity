@@ -24,6 +24,12 @@ export default {
       to: {type: 'author'}
     },
     {
+      name: 'testCircularAuthor',
+      title: 'Test circular author',
+      type: 'reference',
+      to: [{type: 'author'}, {type: 'post'}]
+    },
+    {
       name: 'mainImage',
       title: 'Main image',
       type: 'image',
