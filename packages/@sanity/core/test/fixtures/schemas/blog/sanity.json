@@ -3,7 +3,7 @@
   "parts": [
     {
       "name": "part:@sanity/base/schema",
-      "path": "./fixtures/schema.js"
+      "path": "./schema.js"
     }
   ]
 }
