@@ -161,11 +161,10 @@ function extractFromSanitySchema(sanitySchema) {
       name,
       type: 'Object',
       description: getDescription(def),
-      fields: fields.map(
-        field =>
-          isArrayOfBlocks(field)
-            ? buildRawField(field, name)
-            : convertType(field, name, {fieldName: field.name})
+      fields: fields.map(field =>
+        isArrayOfBlocks(field)
+          ? buildRawField(field, name)
+          : convertType(field, name, {fieldName: field.name})
       )
     }
   }
