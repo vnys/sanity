@@ -17,7 +17,8 @@ import {ResolvedUploader, Uploader, UploaderResolver} from '../../sanity/uploads
 import WithMaterializedReference from '../../utils/WithMaterializedReference'
 import ImageToolInput from '../ImageToolInput'
 import HotspotImage from '@sanity/imagetool/HotspotImage'
-import SelectAsset from './SelectAsset'
+//import SelectAsset from './SelectAsset'
+import SelectAssetImport from 'part:@sanity/form-builder/input/asset-source'
 import {FormBuilderInput} from '../../FormBuilderInput'
 import UploadPlaceholder from '../common/UploadPlaceholder'
 import UploadTargetFieldset from '../../utils/UploadTargetFieldset'
@@ -25,6 +26,8 @@ import Snackbar from 'part:@sanity/components/snackbar/default'
 import ImageTool from '@sanity/imagetool'
 import {Observable} from 'rxjs'
 import {Path} from '../../typedefs/path'
+
+const SelectAsset = SelectAssetImport.component
 
 type FieldT = {
   name: string
