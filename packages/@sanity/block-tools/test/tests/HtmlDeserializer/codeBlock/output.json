@@ -5,5 +5,5 @@
     "markDefs": [],
     "style": "normal"
   },
-  {"_type": "code", "text": "const foo = 'bar'"}
+  {"_type": "code", "text": "const foo = 'bar'\nconst bar = 'foo'"}
 ]

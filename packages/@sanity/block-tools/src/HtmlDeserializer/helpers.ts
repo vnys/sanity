@@ -39,11 +39,7 @@ export function tagName(el) {
 
 // TODO: make this plugin-style
 export function preprocess(html, parseHtml) {
-  const compactHtml = html
-    .trim() // Trim whitespace
-    .replace(/\s\s+/g, ' ') // Remove multiple whitespace
-    .replace(/[\r\n]/g, ' ') // Remove newlines / carriage returns
-  const doc = parseHtml(compactHtml)
+  const doc = parseHtml(html)
   preprocessors.forEach(processor => {
     processor(html, doc)
   })

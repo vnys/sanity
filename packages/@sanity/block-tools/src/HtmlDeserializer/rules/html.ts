@@ -31,18 +31,13 @@ export default function createHTMLRules(blockContentType, options: any = {}) {
     // Text nodes
     {
       deserialize(el) {
-        const isValidWhiteSpace =
-          el.nodeType === 3 &&
-          el.textContent.replace(/[\r\n]/g, ' ').replace(/\s\s+/g, ' ') === ' ' &&
-          el.nextSibling && el.nextSibling.nodeType !== 3 &&
-          el.previousSibling && el.previousSibling.nodeType !== 3
         const isValidText =
-          (isValidWhiteSpace || el.textContent !== ' ') && tagName(el.parentNode) !== 'body'
+          el.textContent.replace(/\r?\n|\r/g, '').replace(/\s\s+/g, '') !== ''
         if (el.nodeName === '#text' && isValidText) {
           return {
             ...DEFAULT_SPAN,
             marks: [],
-            text: el.textContent.replace(/\s\s+/g, ' ')
+            text: el.textContent.replace(/\r?\n|\r/g, ' ').replace(/\s\s+/g, ' ')
           }
         }
         return undefined
