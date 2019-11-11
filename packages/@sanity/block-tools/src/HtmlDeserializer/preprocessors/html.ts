@@ -9,7 +9,6 @@ const unwantedWordDocumentPaths = [
   '//comment()',
   '//style',
   '//xml',
-  '//script',
   '//meta',
   '//link'
 ]
