@@ -8,14 +8,12 @@ import styles from './DeveloperPreview.module.css'
 
 function DeveloperPreview(props) {
   const {history, draft, published} = props
-  const {snapshot: historical, isLoading} = history.document
-
-  if (!historical && isLoading) {
-    return <Spinner center message="Loading document" />
-  }
+  const {snapshot: historical, isLoading: isLoadingHistorical} = history.document
 
   return (
     <div className={styles.root}>
+      {isLoadingHistorical && <Spinner center message="Loading revision" />}
+
       <JSONPretty
         data={historical || draft || published}
         theme={monikai}
