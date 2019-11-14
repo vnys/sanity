@@ -19,10 +19,11 @@ export default class FormView extends React.PureComponent {
     patchChannel: PropTypes.object,
     draft: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
     published: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
-    initialValue: PropTypes.object,
+    displayedDocument: PropTypes.shape({_type: PropTypes.string}),
+    initialValue: PropTypes.shape({_type: PropTypes.string}),
     isReconnecting: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
-    type: PropTypes.shape({name: PropTypes.string, title: PropTypes.string}).isRequired,
+    schemaType: PropTypes.shape({name: PropTypes.string, title: PropTypes.string}).isRequired,
     markers: PropTypes.arrayOf(
       PropTypes.shape({
         path: PropTypes.array
@@ -44,7 +45,9 @@ export default class FormView extends React.PureComponent {
     markers: [],
     draft: undefined,
     published: undefined,
-    isReconnecting: false
+    displayedDocument: undefined,
+    isReconnecting: false,
+    initialValue: undefined
   }
 
   state = INITIAL_STATE
@@ -72,7 +75,7 @@ export default class FormView extends React.PureComponent {
   }
 
   isLiveEditEnabled() {
-    const selectedSchemaType = schema.get(this.props.type.name)
+    const selectedSchemaType = schema.get(this.props.schemaType.name)
     return selectedSchemaType.liveEdit === true
   }
 
@@ -81,22 +84,23 @@ export default class FormView extends React.PureComponent {
       draft,
       published,
       history,
-      type,
+      schemaType,
       markers,
       patchChannel,
       initialValue,
-      isReconnecting
+      isReconnecting,
+      displayedDocument
     } = this.props
 
     const {focusPath, filterField} = this.state
     const value = draft || published
 
-    const hasTypeMismatch = value && value._type && value._type !== type.name
+    const hasTypeMismatch = value && value._type && value._type !== schemaType.name
     if (hasTypeMismatch) {
       return (
         <div className={styles.typeMisMatchMessage}>
           This document is of type <code>{value._type}</code> and cannot be edited as{' '}
-          <code>{type.name}</code>
+          <code>{schemaType.name}</code>
           <div>
             <Button onClick={this.handleEditAsActualType}>Edit as {value._type} instead</Button>
           </div>
@@ -107,12 +111,7 @@ export default class FormView extends React.PureComponent {
     return (
       <div className={styles.root}>
         {history.isOpen ? (
-          <HistoryForm
-            document={history.document}
-            event={history.selectedEvent}
-            schema={schema}
-            type={type}
-          />
+          <HistoryForm document={displayedDocument} schema={schema} schemaType={schemaType} />
         ) : (
           <EditForm
             draft={draft}
@@ -125,9 +124,9 @@ export default class FormView extends React.PureComponent {
             onFocus={this.handleFocus}
             patchChannel={patchChannel}
             published={published}
-            readOnly={isReconnecting || !isActionEnabled(type, 'update')}
+            readOnly={isReconnecting || !isActionEnabled(schemaType, 'update')}
             schema={schema}
-            type={type}
+            type={schemaType}
           />
         )}
 
