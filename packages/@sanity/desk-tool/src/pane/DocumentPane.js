@@ -180,7 +180,6 @@ export default withInitialValue(
     static propTypes = {
       styles: PropTypes.object, // eslint-disable-line react/forbid-prop-types
       title: PropTypes.string,
-      itemId: PropTypes.string.isRequired,
       paneKey: PropTypes.string.isRequired,
       type: PropTypes.string.isRequired,
       isSelected: PropTypes.bool.isRequired,
