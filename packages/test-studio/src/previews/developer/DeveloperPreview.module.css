@@ -4,6 +4,7 @@
   padding: 1em;
   min-height: 100%;
   box-sizing: border-box;
+  word-break: break-word;
 
   @nest & > div > pre {
     margin: 0;
