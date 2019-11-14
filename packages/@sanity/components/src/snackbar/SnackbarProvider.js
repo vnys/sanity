@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import {Portal} from '../utilities/Portal'
 import SnackbarItem from './SnackbarItem'
 
+// This determines (in pixels) how far from the bottom of the screen
+// the lowest of the snackbars will be placed:
+const SNACKBAR_MARGIN_BOTTOM = 76
+
 export default class SnackbarProvider extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired
@@ -26,7 +30,10 @@ export default class SnackbarProvider extends React.Component {
   get offsets() {
     const {activeSnacks} = this.state
     return activeSnacks.map((snack, index) => {
-      const {view: viewOffset, snackbar: snackbarOffset} = {view: 10, snackbar: 12}
+      const {view: viewOffset, snackbar: snackbarOffset} = {
+        view: SNACKBAR_MARGIN_BOTTOM,
+        snackbar: 12
+      }
       let offset = viewOffset
       while (activeSnacks[index - 1]) {
         const snackHeight = activeSnacks[index - 1].height || 60
@@ -124,7 +131,7 @@ export default class SnackbarProvider extends React.Component {
   }
 
   /*
-    Dismiss the snack from the view, 
+    Dismiss the snack from the view,
     then call to remove it from activeSnacks in order to
     transition it out
   */
@@ -144,7 +151,7 @@ export default class SnackbarProvider extends React.Component {
     Remove the snack from the state
     The removal is delayed in order to transition the snack out first
   */
-  handleRemoveSnack = (id) => {
+  handleRemoveSnack = id => {
     this._removeTimer = setTimeout(() => {
       this.setState(({activeSnacks}) => ({
         activeSnacks: activeSnacks.filter(snack => snack.id !== id)
