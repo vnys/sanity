@@ -1352,6 +1352,7 @@ export default withInitialValue(
           historicalSnapshot || draft.snapshot || published.snapshot || initialValue,
 
         // Other stuff
+        documentId: this.getPublishedId(),
         schemaType,
         markers: markers || []
       }
