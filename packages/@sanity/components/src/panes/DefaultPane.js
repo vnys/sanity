@@ -244,7 +244,7 @@ class Pane extends React.PureComponent {
           <div className={styles.initialValueTemplateDropDownMenuButton}>
             <DropDownButton
               bleed
-              className={styles.initialValueTemplateDropDownMenu}
+              className={styles.actionButton}
               items={items}
               renderItem={this.renderActionMenuItem}
               // eslint-disable-next-line react/jsx-no-bind
@@ -254,12 +254,8 @@ class Pane extends React.PureComponent {
               ripple={false}
               placement="bottom-end"
             >
-              <div className={styles.buttonWrapper}>
-                <div className={styles.actionButton}>
-                  <div className={styles.actionButtonInner}>
-                    <Icon />
-                  </div>
-                </div>
+              <div className={styles.actionButtonInner}>
+                <Icon />
               </div>
             </DropDownButton>
           </div>

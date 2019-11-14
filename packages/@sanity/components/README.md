@@ -1,3 +1,3 @@
-# components
+# @sanity/components
 
-Basic UX components
+Shared UI components used by the Sanity Studio.

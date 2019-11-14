@@ -1,0 +1,181 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+:root {
+  /* --button-inverted-color: var(--text-color); */
+  --button-focus-shadow: 0 0 0 3px color(var(--input-border-color-focus) a(50%));
+  --primary-button-focus-shadow: 0 0 0 3px color(var(--default-button-primary-color) a(50%));
+  --danger-button-focus-shadow: 0 0 0 3px color(var(--state-danger-color) a(50%));
+  --success-button-focus-shadow: 0 0 0 3px color(var(--state-success-color) a(50%));
+  --warning-button-focus-shadow: 0 0 0 3px color(var(--state-warning-color) a(50%));
+
+  /* normal */
+  --button-bg: var(--default-button-color);
+  --button-bg--hover: color(var(--button-bg) lightness(+ 5%));
+  --button-bg--active: var(--default-button-color--active);
+  --button-fg: var(--default-button-color--inverted);
+
+  /* primary */
+  --primary-button-bg: var(--default-button-primary-color);
+  --primary-button-bg--hover: color(var(--default-button-primary-color) lightness(+ 5%));
+  --primary-button-bg--active: var(--default-button-primary-color);
+  --primary-button-fg: var(--brand-primary--inverted);
+
+  /* success */
+  --success-button-bg: var(--default-button-success-color);
+  --success-button-bg--hover: color(var(--default-button-success-color) lightness(+ 5%));
+  --success-button-bg--active: var(--default-button-success-color);
+  --success-button-fg: var(--default-button-success-color--inverted);
+
+  /* warning */
+  --warning-button-bg: var(--default-button-warning-color);
+  --warning-button-bg--hover: color(var(--default-button-warning-color) lightness(+ 5%));
+  --warning-button-bg--active: var(--default-button-warning-color);
+  --warning-button-fg: var(--default-button-warning-color--inverted);
+
+  /* danger */
+  --danger-button-bg: var(--default-button-danger-color);
+  --danger-button-bg--hover: color(var(--default-button-danger-color) lightness(+ 5%));
+  --danger-button-bg--active: var(--default-button-danger-color);
+  --danger-button-fg: var(--default-button-danger-color--inverted);
+}
+
+button.root {
+  -webkit-font-smoothing: inherit;
+  -webkit-appearance: none;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+a.root {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.root {
+  line-height: 1;
+  outline: none;
+
+  @nest & > div {
+    outline: none;
+    border: 1px solid transparent;
+    padding: calc(11 / 16 * 1em) calc(12 / 16 * 1em);
+    background: var(--button-bg);
+    color: var(--button-fg);
+    border-radius: 3px;
+  }
+
+  /* normal */
+  @nest &:not([data-disabled='true']) {
+    @media (hover: hover) {
+      @nest &:hover > div {
+        background-color: var(--button-bg--hover);
+      }
+
+      @nest &:active > div {
+        background-color: var(--button-bg--active);
+      }
+
+      @nest &:focus > div {
+        box-shadow: var(--button-focus-shadow);
+      }
+    }
+  }
+
+  @nest &[data-disabled='true'] {
+    opacity: 0.25;
+    cursor: default;
+  }
+
+  /* primary */
+  @nest &:not([data-disabled='true'])[data-color='primary'] {
+    @nest & > div {
+      background: var(--primary-button-bg);
+      color: var(--primary-button-fg);
+    }
+
+    @media (hover: hover) {
+      @nest &:hover > div {
+        background-color: var(--primary-button-bg--hover);
+      }
+
+      @nest &:active > div {
+        background-color: var(--primary-button-bg--active);
+      }
+
+      @nest &:focus > div {
+        box-shadow: var(--primary-button-focus-shadow);
+      }
+    }
+  }
+
+  /* success */
+  @nest &:not([data-disabled='true'])[data-color='success'] {
+    @nest & > div {
+      background: var(--success-button-bg);
+      color: var(--success-button-fg);
+    }
+
+    @media (hover: hover) {
+      @nest &:hover > div {
+        background-color: var(--success-button-bg--hover);
+      }
+
+      @nest &:active > div {
+        background-color: var(--success-button-bg--active);
+      }
+
+      @nest &:focus > div {
+        box-shadow: var(--success-button-focus-shadow);
+      }
+    }
+  }
+
+  /* warning */
+  @nest &:not([data-disabled='true'])[data-color='warning'] {
+    @nest & > div {
+      background: var(--warning-button-bg);
+      color: var(--warning-button-fg);
+    }
+
+    @media (hover: hover) {
+      @nest &:hover > div {
+        background-color: var(--warning-button-bg--hover);
+      }
+
+      @nest &:active > div {
+        background-color: var(--warning-button-bg--active);
+      }
+
+      @nest &:focus > div {
+        box-shadow: var(--warning-button-focus-shadow);
+      }
+    }
+  }
+
+  /* danger */
+  @nest &:not([data-disabled='true'])[data-color='danger'] {
+    @nest & > div {
+      background: var(--danger-button-bg);
+      color: var(--danger-button-fg);
+    }
+
+    @media (hover: hover) {
+      @nest &:hover > div {
+        background-color: var(--danger-button-bg--hover);
+      }
+
+      @nest &:active > div {
+        background-color: var(--danger-button-bg--active);
+      }
+
+      @nest &:focus > div {
+        box-shadow: var(--danger-button-focus-shadow);
+      }
+    }
+  }
+}

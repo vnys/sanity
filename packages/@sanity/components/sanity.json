@@ -18,60 +18,64 @@
       "description": "Default autocomplete styling"
     },
     {
+      "name": "part:@sanity/components/button",
+      "description": "Button"
+    },
+    {
       "name": "part:@sanity/components/buttons/default",
-      "description": "Default button"
+      "description": "Default button (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/button-grid",
-      "description": "Use this to wrap buttons"
+      "description": "Use this to wrap buttons (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/button-collection",
-      "description": "Deprecated. Use button-grid"
+      "description": "Deprecated. Use button-grid (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/button-group",
-      "description": "Use this to group buttons with no spacing"
+      "description": "Use this to group buttons with no spacing (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/anchor",
-      "description": "Same as default button, but with an <a>. Takes href"
+      "description": "Same as default button, but with an <a>. Takes href (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/intent",
-      "description": "Same as default button, but takes an intent and generates an anchor"
+      "description": "Same as default button, but takes an intent and generates an anchor (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/default-style",
-      "description": "Default button styling"
+      "description": "Default button styling (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/button-grid-style",
-      "description": "Container to set buttons in grid"
+      "description": "Container to set buttons in grid (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/fab",
-      "description": "Floating Action Button"
+      "description": "Floating Action Button (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/fab-style",
-      "description": "Floating Action Button styling"
+      "description": "Floating Action Button styling (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/dropdown",
-      "description": "Drop down button with menu"
+      "description": "Drop down button with menu (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/dropdown-style",
-      "description": "Drop down button styling"
+      "description": "Drop down button styling (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/in-input",
-      "description": "Button inside an input"
+      "description": "Button inside an input (legacy)"
     },
     {
       "name": "part:@sanity/components/buttons/in-input-style",
-      "description": "Styling for button inside an input"
+      "description": "Styling for button inside an input (legacy)"
     },
     {
       "name": "part:@sanity/components/utilities/image-loader",
@@ -315,8 +319,16 @@
       "description": "Styling for new snackbars."
     },
     {
+      "name": "part:@sanity/components/menu",
+      "description": "Menu"
+    },
+    {
+      "name": "part:@sanity/components/menu-item",
+      "description": "Menu item"
+    },
+    {
       "name": "part:@sanity/components/menus/default",
-      "description": "Standard context menu"
+      "description": "Standard context menu (legacy)"
     },
     {
       "name": "part:@sanity/components/menus/default-style",
@@ -459,28 +471,32 @@
       "path": "autocomplete/DefaultAutocomplete.js"
     },
     {
+      "implements": "part:@sanity/components/button",
+      "path": "button/Button.js"
+    },
+    {
       "implements": "part:@sanity/components/buttons/default",
-      "path": "buttons/DefaultButton.js"
+      "path": "___legacy/buttons/DefaultButton.js"
     },
     {
       "implements": "part:@sanity/components/buttons/button-grid",
-      "path": "buttons/ButtonGrid.js"
+      "path": "___legacy/buttons/ButtonGrid.js"
     },
     {
       "implements": "part:@sanity/components/buttons/button-collection",
-      "path": "buttons/ButtonCollection.js"
+      "path": "___legacy/buttons/ButtonCollection.js"
     },
     {
       "implements": "part:@sanity/components/buttons/button-group",
-      "path": "buttons/ButtonGroup.js"
+      "path": "___legacy/buttons/ButtonGroup.js"
     },
     {
       "implements": "part:@sanity/components/buttons/anchor",
-      "path": "buttons/AnchorButton.js"
+      "path": "___legacy/buttons/AnchorButton.js"
     },
     {
       "implements": "part:@sanity/components/buttons/intent",
-      "path": "buttons/IntentButton.js"
+      "path": "___legacy/buttons/IntentButton.js"
     },
     {
       "implements": "part:@sanity/components/loading/spinner",
@@ -496,7 +512,7 @@
     },
     {
       "implements": "part:@sanity/components/buttons/dropdown",
-      "path": "buttons/DropDownButton.js"
+      "path": "___legacy/buttons/DropDownButton.js"
     },
     {
       "implements": "part:@sanity/components/toggles/switch",
@@ -681,23 +697,23 @@
     },
     {
       "implements": "part:@sanity/components/buttons/default-style",
-      "path": "buttons/styles/DefaultButton.css"
+      "path": "___legacy/buttons/styles/DefaultButton.css"
     },
     {
       "implements": "part:@sanity/components/buttons/button-grid-style",
-      "path": "buttons/styles/ButtonGrid.css"
+      "path": "___legacy/buttons/styles/ButtonGrid.css"
     },
     {
       "implements": "part:@sanity/components/buttons/dropdown-style",
-      "path": "buttons/styles/DropDownButton.css"
+      "path": "___legacy/buttons/styles/DropDownButton.css"
     },
     {
       "implements": "part:@sanity/components/buttons/in-input",
-      "path": "buttons/InInput.js"
+      "path": "___legacy/buttons/InInput.js"
     },
     {
       "implements": "part:@sanity/components/buttons/in-input-style",
-      "path": "buttons/styles/InInput.css"
+      "path": "___legacy/buttons/styles/InInput.css"
     },
     {
       "implements": "part:@sanity/components/fileinput/default",
@@ -812,17 +828,25 @@
       "path": "snackbar/styles/SnackbarItem.css"
     },
     {
+      "implements": "part:@sanity/components/menu",
+      "path": "menu/Menu.js"
+    },
+    {
+      "implements": "part:@sanity/components/menu-item",
+      "path": "menuItem/MenuItem.js"
+    },
+    {
       "implements": "part:@sanity/components/menus/default",
-      "path": "menus/DefaultMenu.js"
+      "path": "___legacy/menus/DefaultMenu.js"
     },
     {
       "implements": "part:@sanity/components/menus/default-style",
-      "path": "menus/styles/DefaultMenu.css"
+      "path": "___legacy/menus/styles/DefaultMenu.css"
     },
     {
       "name": "part:@sanity/components/menus/divider",
       "description": "Menu item divider symbol",
-      "path": "menus/divider.js"
+      "path": "___legacy/menus/divider.js"
     },
     {
       "implements": "part:@sanity/components/lists/default",
@@ -946,7 +970,11 @@
     },
     {
       "implements": "part:@sanity/base/component",
-      "path": "buttons/story.js"
+      "path": "button/story.js"
+    },
+    {
+      "implements": "part:@sanity/base/component",
+      "path": "___legacy/buttons/story.js"
     },
     {
       "implements": "part:@sanity/base/component",
@@ -974,7 +1002,11 @@
     },
     {
       "implements": "part:@sanity/base/component",
-      "path": "menus/story.js"
+      "path": "menu/story.js"
+    },
+    {
+      "implements": "part:@sanity/base/component",
+      "path": "___legacy/menus/story.js"
     },
     {
       "implements": "part:@sanity/base/component",

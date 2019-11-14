@@ -374,12 +374,14 @@
 }
 
 .initialValueTemplateDropDownMenuButton {
-  @nest & [class^='DropDownButton'] {
-    width: 2.1875rem;
-  }
+  @nest & > button {
+    -webkit-appearance: none;
+    background: #eee;
+    border: 0;
 
-  @nest & [class^='DropDownButton']:hover {
-    background-color: transparent;
+    & > span > span {
+      margin: 0;
+    }
   }
 }
 

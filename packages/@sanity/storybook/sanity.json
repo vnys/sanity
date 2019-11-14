@@ -12,22 +12,27 @@
     },
     {
       "name": "part:@sanity/storybook/decorators/center",
-      "description": "Center decorator for storybook",
+      "description": "Center decorator for Storybook",
       "path": "addons/Center.js"
     },
     {
       "name": "part:@sanity/storybook/iframe",
-      "description": "React component that renders a fullscreen iframe that shows the storybook",
+      "description": "React component that renders a fullscreen iframe that shows Storybook",
       "path": "tool/StorybookTool.js"
     },
     {
+      "name": "part:@sanity/storybook/addons/actions",
+      "description": "Actions addon for Storybook",
+      "path": "addons/actions.js"
+    },
+    {
       "name": "part:@sanity/storybook/addons/knobs",
-      "description": "Knobs addon for storybook",
+      "description": "Knobs addon for Storybook",
       "path": "addons/Knobs.js"
     },
     {
       "name": "part:@sanity/storybook/addons/sanity",
-      "description": "Sanity addon for storybook",
+      "description": "Sanity addon for Storybook",
       "path": "addons/sanity/Sanity.js"
     },
     {

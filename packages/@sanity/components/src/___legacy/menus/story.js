@@ -9,7 +9,7 @@ import Chance from 'chance'
 
 const chance = new Chance()
 
-storiesOf('Menus')
+storiesOf('___legacy/Menus')
   .addDecorator(withKnobs)
   .add('Default', () => {
     const icon = boolean('icons', false) ? SanityIcon : false

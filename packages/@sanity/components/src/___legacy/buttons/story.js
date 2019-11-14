@@ -67,7 +67,7 @@ const centerStyle = {
   left: 0
 }
 
-storiesOf('Buttons', module)
+storiesOf('___legacy/Buttons', module)
   .addDecorator(withKnobs)
   .add('Default', () => {
     let testElement = null
@@ -313,7 +313,6 @@ storiesOf('Buttons', module)
           >
             Success
           </Button>
-
           <h2>With icons</h2>
           <Button
             onClick={action('clicked')}
@@ -353,7 +352,6 @@ storiesOf('Buttons', module)
           >
             Dropdown
           </DropDownButton>
-
           <h2>Only icons</h2>
           <Button
             onClick={action('clicked')}
@@ -413,7 +411,6 @@ storiesOf('Buttons', module)
             disabled={disabled}
             loading={loading}
           />
-
           <h2>Intent buttons with only icons</h2>
           <IntentButton
             intent="create"
@@ -486,7 +483,6 @@ storiesOf('Buttons', module)
             disabled={disabled}
             loading={loading}
           />
-
           <h2>On color areas</h2>
           <div style={{backgroundColor: 'red', padding: '1rem'}}>
             <Button onClick={action('clicked')} color="white" disabled={disabled} loading={loading}>
