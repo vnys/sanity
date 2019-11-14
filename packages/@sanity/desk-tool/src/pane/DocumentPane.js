@@ -1337,19 +1337,21 @@ export default withInitialValue(
       const activeView = views.find(view => view.id === activeViewId) || views[0] || {type: 'form'}
 
       const selectedIsLatest =
-        urlParams.rev === CURRENT_REVISION_FLAG || selectedHistoryEvent === historyState.events[0]
+        urlParams.rev === CURRENT_REVISION_FLAG && selectedHistoryEvent === historyState.events[0]
 
+      // Should be null if not displaying a historical revision
       const historicalSnapshot = selectedIsLatest
         ? draft.snapshot || published.snapshot
         : historical.snapshot || historical.prevSnapshot
 
       const viewProps = {
         // "Documents"
-        published: published.snapshot,
-        draft: draft.snapshot,
-        historical: historicalSnapshot,
-        displayedDocument:
-          historicalSnapshot || draft.snapshot || published.snapshot || initialValue,
+        document: {
+          published: published.snapshot,
+          draft: draft.snapshot,
+          historical: historicalSnapshot,
+          displayed: historicalSnapshot || draft.snapshot || published.snapshot || initialValue
+        },
 
         // Other stuff
         documentId: this.getPublishedId(),

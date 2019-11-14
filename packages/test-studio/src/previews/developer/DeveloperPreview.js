@@ -6,10 +6,10 @@ import monikai from 'react-json-pretty/dist/monikai'
 import styles from './DeveloperPreview.module.css'
 
 function DeveloperPreview(props) {
-  const {displayedDocument} = props
+  const {displayed} = props.document
   return (
     <div className={styles.root}>
-      <JSONPretty data={displayedDocument} theme={monikai} mainStyle="white-space: pre-wrap" />
+      <JSONPretty data={displayed} theme={monikai} mainStyle="white-space: pre-wrap" />
     </div>
   )
 }

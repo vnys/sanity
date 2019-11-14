@@ -17,9 +17,11 @@ const INITIAL_STATE = {
 export default class FormView extends React.PureComponent {
   static propTypes = {
     patchChannel: PropTypes.object,
-    draft: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
-    published: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
-    displayedDocument: PropTypes.shape({_type: PropTypes.string}),
+    document: PropTypes.shape({
+      draft: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
+      published: PropTypes.shape({_id: PropTypes.string, _type: PropTypes.string}),
+      displayed: PropTypes.shape({_type: PropTypes.string})
+    }).isRequired,
     initialValue: PropTypes.shape({_type: PropTypes.string}),
     isReconnecting: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
@@ -43,9 +45,6 @@ export default class FormView extends React.PureComponent {
 
   static defaultProps = {
     markers: [],
-    draft: undefined,
-    published: undefined,
-    displayedDocument: undefined,
     isReconnecting: false,
     initialValue: undefined
   }
@@ -81,17 +80,16 @@ export default class FormView extends React.PureComponent {
 
   render() {
     const {
-      draft,
-      published,
+      document,
       history,
       schemaType,
       markers,
       patchChannel,
       initialValue,
-      isReconnecting,
-      displayedDocument
+      isReconnecting
     } = this.props
 
+    const {draft, published, displayed} = document
     const {focusPath, filterField} = this.state
     const value = draft || published
 
@@ -111,7 +109,7 @@ export default class FormView extends React.PureComponent {
     return (
       <div className={styles.root}>
         {history.isOpen ? (
-          <HistoryForm document={displayedDocument} schema={schema} schemaType={schemaType} />
+          <HistoryForm document={displayed} schema={schema} schemaType={schemaType} />
         ) : (
           <EditForm
             draft={draft}
