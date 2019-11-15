@@ -123,7 +123,7 @@ function getInitialValueProps(document, props, paneContext) {
   }
 
   const {options = {}} = props
-  const template = options.template || urlTemplate
+  const template = definedTemplate || urlTemplate
   const typeTemplates = getTemplatesBySchemaType(options.type)
 
   const parameters = {...options.templateParameters, ...payload}

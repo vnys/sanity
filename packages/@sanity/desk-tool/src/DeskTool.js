@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {isEqual} from 'lodash'
-import {throwError, interval, defer} from 'rxjs'
-import {map, switchMap, distinctUntilChanged, debounce} from 'rxjs/operators'
+import {throwError, interval, defer, of} from 'rxjs'
+import {map, switchMap, distinctUntilChanged, debounce, tap} from 'rxjs/operators'
 import shallowEquals from 'shallow-equals'
 import {withRouterHOC} from 'part:@sanity/base/router'
 import {resolvePanes} from './utils/resolvePanes'
@@ -115,6 +115,7 @@ export default withRouterHOC(
     setResolvedPanes = panes => {
       const router = this.props.router
       const paneSegments = router.state.panes || []
+
       this.setState({panes, isResolving: false})
 
       if (panes.length < paneSegments.length) {
@@ -147,7 +148,9 @@ export default withRouterHOC(
           switchMap(structure =>
             resolvePanes(structure, props.router.state.panes || [], this.state.panes, fromIndex)
           ),
-          debounce(panes => interval(hasLoading(panes) ? 50 : 0))
+          switchMap(panes =>
+            hasLoading(panes) ? of(panes).pipe(debounce(() => interval(50))) : of(panes)
+          )
         )
         .subscribe(this.setResolvedPanes, this.setResolveError)
     }
@@ -185,8 +188,8 @@ export default withRouterHOC(
 
     panesAreEqual = (prev, next) => this.calcPanesEquality(prev, next).ids
 
-    shouldDerivePanes = prevProps => {
-      const nextRouterState = this.props.router.state
+    shouldDerivePanes = (nextProps, prevProps) => {
+      const nextRouterState = nextProps.router.state
       const prevRouterState = prevProps.router.state
 
       return (
@@ -204,22 +207,24 @@ export default withRouterHOC(
       ) {
         this.props.onPaneChange(this.state.panes || [])
       }
-
-      if (this.shouldDerivePanes(prevProps)) {
-        const prevPanes = prevProps.router.state.panes || []
-        const nextPanes = this.props.router.state.panes || []
-        const diffAt = getPaneDiffIndex(nextPanes, prevPanes)
-
-        if (diffAt) {
-          this.derivePanes(this.props, diffAt)
-        }
-      }
     }
 
     shouldComponentUpdate(nextProps, nextState) {
       const prevPanes = this.props.router.state.panes || []
       const nextPanes = nextProps.router.state.panes || []
       const panesEqual = this.calcPanesEquality(prevPanes, nextPanes)
+
+      // This is ugly - causing side-effects in shouldComponentUpdate is not good,
+      // however we really want/need to prevent a partially updated state, and this
+      // seems like the only place for it (now that componentWillReceiveProps is gone)
+      if (!panesEqual.ids && this.shouldDerivePanes(nextProps, this.props)) {
+        const diffAt = getPaneDiffIndex(nextPanes, prevPanes)
+
+        if (diffAt) {
+          this.derivePanes(nextProps, diffAt)
+          return false
+        }
+      }
 
       const {router: oldRouter, ...oldProps} = this.props
       const {router: newRouter, ...newProps} = nextProps
