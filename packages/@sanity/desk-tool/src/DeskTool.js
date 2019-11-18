@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {isEqual} from 'lodash'
 import {throwError, interval, defer, of} from 'rxjs'
-import {map, switchMap, distinctUntilChanged, debounce, tap} from 'rxjs/operators'
+import {map, switchMap, distinctUntilChanged, debounce} from 'rxjs/operators'
 import shallowEquals from 'shallow-equals'
 import {withRouterHOC} from 'part:@sanity/base/router'
 import {resolvePanes} from './utils/resolvePanes'
@@ -10,10 +10,10 @@ import styles from './styles/DeskTool.css'
 import DeskToolPanes from './DeskToolPanes'
 import StructureError from './components/StructureError'
 import serializeStructure from './utils/serializeStructure'
+import isNarrowScreen from './utils/isNarrowScreen'
 import windowWidth$ from './utils/windowWidth'
 import defaultStructure from './defaultStructure'
 import {LOADING_PANE} from './index'
-import isNarrowScreen from './utils/isNarrowScreen'
 
 const EMPTY_PANE_KEYS = []
 
@@ -207,29 +207,28 @@ export default withRouterHOC(
       ) {
         this.props.onPaneChange(this.state.panes || [])
       }
-    }
 
-    shouldComponentUpdate(nextProps, nextState) {
-      const prevPanes = this.props.router.state.panes || []
-      const nextPanes = nextProps.router.state.panes || []
+      const prevPanes = prevProps.router.state.panes || []
+      const nextPanes = this.props.router.state.panes || []
       const panesEqual = this.calcPanesEquality(prevPanes, nextPanes)
 
-      // This is ugly - causing side-effects in shouldComponentUpdate is not good,
-      // however we really want/need to prevent a partially updated state, and this
-      // seems like the only place for it (now that componentWillReceiveProps is gone)
-      if (!panesEqual.ids && this.shouldDerivePanes(nextProps, this.props)) {
+      if (!panesEqual.ids && this.shouldDerivePanes(this.props, prevProps)) {
         const diffAt = getPaneDiffIndex(nextPanes, prevPanes)
 
         if (diffAt) {
-          this.derivePanes(nextProps, diffAt)
-          return false
+          this.derivePanes(this.props, diffAt)
         }
       }
+    }
 
+    shouldComponentUpdate(nextProps, nextState) {
       const {router: oldRouter, ...oldProps} = this.props
       const {router: newRouter, ...newProps} = nextProps
       const {panes: oldPanes, ...oldState} = this.state
       const {panes: newPanes, ...newState} = nextState
+      const prevPanes = oldRouter.state.panes || []
+      const nextPanes = newRouter.state.panes || []
+      const panesEqual = this.calcPanesEquality(prevPanes, nextPanes)
 
       const shouldUpdate =
         !panesEqual.params ||
