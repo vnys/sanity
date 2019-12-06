@@ -10,7 +10,7 @@ import styles from './DocumentStatusBarActions.css'
 
 const TOUCH_SUPPORT = 'ontouchstart' in document.documentElement
 
-class DocumentStatusBarActions extends React.PureComponent {
+export class DocumentStatusBarActions extends React.PureComponent {
   static propTypes = {
     actions: PropTypes.arrayOf(
       PropTypes.shape({
@@ -176,9 +176,8 @@ class DocumentStatusBarActions extends React.PureComponent {
     const {actions, idPrefix, isDisconnected} = this.props
     const {isMenuOpen} = this.state
     const firstAction = actions[0]
-    const restActions = actions.slice(1)
-    const restActionsLen = restActions.length
-    const hasMoreActions = restActionsLen > 0
+    const [primary, ...rest] = actions
+    const hasMoreActions = rest.length > 0
     const firstActionDisabled =
       firstAction && (!firstAction.handleClick || isDisconnected || firstAction.disabled)
 
@@ -270,5 +269,3 @@ class DocumentStatusBarActions extends React.PureComponent {
     )
   }
 }
-
-export default DocumentStatusBarActions
