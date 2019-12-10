@@ -1,0 +1,20 @@
+{
+  "parts": [
+    {
+      "implements": "part:@sanity/base/tool",
+      "path": "./tool"
+    },
+    {
+      "implements": "part:@sanity/plugin-review-workflow/document-actions",
+      "path": "./documentActions"
+    },
+    {
+      "implements": "part:@sanity/plugin-review-workflow/schemas",
+      "path": "./schemas"
+    },
+    {
+      "implements": "part:@sanity/plugin-review-workflow/structure",
+      "path": "./structure"
+    }
+  ]
+}

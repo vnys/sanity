@@ -1,0 +1,11 @@
+.root {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  @nest & label {
+    font-size: 11px;
+    text-transform: uppercase;
+    line-height: 1;
+    letter-spacing: 0.5px;
+  }
+}

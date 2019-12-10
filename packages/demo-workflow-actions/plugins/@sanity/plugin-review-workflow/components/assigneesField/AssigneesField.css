@@ -1,0 +1,5 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.field {
+  border: 1px solid var(--hairline-color);
+}

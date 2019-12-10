@@ -1,0 +1,35 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.isTarget {
+  composes: root;
+}
+
+.header {
+  padding: var(--medium-padding);
+}
+
+.title {
+  font-size: 14px;
+  line-height: 1;
+  margin: 0;
+  opacity: 0.6;
+}
+
+.content {
+  flex: 1;
+  padding: 1em;
+}
+
+.cardList {
+  position: relative;
+
+  @nest & > div + div {
+    margin-top: 1em;
+  }
+}

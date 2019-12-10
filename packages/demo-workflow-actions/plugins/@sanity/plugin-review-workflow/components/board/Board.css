@@ -1,0 +1,41 @@
+.root {
+  background: #e4e8ed;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.isDragging {
+  composes: root;
+}
+
+.nav {
+  padding: 1em;
+  border-bottom: 1px solid #cad1dc;
+}
+
+.bannerActions {
+  padding: 1em;
+  border-bottom: 1px solid #cad1dc;
+  text-align: center;
+}
+
+.columnsContainer {
+  height: 100%;
+  overflow: auto;
+}
+
+.columns {
+  flex: 1;
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+  @nest & > div {
+    /* flex: 1; */
+  }
+
+  @nest & > div + div {
+    border-left: 1px solid #cad1dc;
+  }
+}
