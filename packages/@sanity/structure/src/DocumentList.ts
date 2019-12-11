@@ -53,6 +53,8 @@ const resolveDocumentChildForItem: ChildResolver = (
   )
 }
 
+resolveDocumentChildForItem.RETURNS_EDITABLE_DOCUMENT = true
+
 export interface PartialDocumentList extends BuildableGenericList {
   options?: DocumentListOptions
   schemaTypeName?: string

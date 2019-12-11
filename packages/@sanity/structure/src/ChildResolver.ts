@@ -20,4 +20,6 @@ export interface ChildResolver {
     | Promise<ItemChild>
     | ChildObservable
     | undefined
+
+  RETURNS_EDITABLE_DOCUMENT?: boolean
 }

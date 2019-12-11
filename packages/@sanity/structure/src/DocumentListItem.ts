@@ -4,6 +4,7 @@ import {ListItemBuilder, ListItem, UnserializedListItem, ListItemInput} from './
 import {SchemaType} from './parts/Schema'
 import {SerializeError, HELP_URL} from './SerializeError'
 import {DocumentBuilder, getDefaultDocumentNode} from './Document'
+import {ChildResolver} from './ChildResolver'
 
 export interface DocumentListItemInput extends ListItemInput {
   schemaType: SchemaType | string
@@ -16,14 +17,19 @@ export interface DocumentListItem extends ListItem {
 
 type PartialDocumentListItem = Partial<UnserializedListItem>
 
-const getDefaultChildResolver = (spec: PartialDocumentListItem) => (documentId: string) => {
-  const schemaType =
-    spec.schemaType &&
-    (typeof spec.schemaType === 'string' ? spec.schemaType : spec.schemaType.name)
+const getDefaultChildResolver = (spec: PartialDocumentListItem): ChildResolver => {
+  const resolver: ChildResolver = (documentId: string) => {
+    const schemaType =
+      spec.schemaType &&
+      (typeof spec.schemaType === 'string' ? spec.schemaType : spec.schemaType.name)
 
-  return schemaType
-    ? getDefaultDocumentNode({schemaType, documentId})
-    : new DocumentBuilder().id('documentEditor').documentId(documentId)
+    return schemaType
+      ? getDefaultDocumentNode({schemaType, documentId})
+      : new DocumentBuilder().id('documentEditor').documentId(documentId)
+  }
+
+  resolver.RETURNS_EDITABLE_DOCUMENT = true
+  return resolver
 }
 
 export class DocumentListItemBuilder extends ListItemBuilder {

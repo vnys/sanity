@@ -1,5 +1,8 @@
 import {PartialDocumentList, getTypeNamesFromFilter} from './DocumentList'
-import {StructureNode} from './StructureNodes'
+import {StructureNode, DocumentNode} from './StructureNodes'
+import {DocumentBuilder} from './Document'
+import {ChildResolver} from './ChildResolver'
+import {List} from './List'
 
 type JsonParams = {[key: string]: any}
 
@@ -38,6 +41,14 @@ export const defaultIntentChecker: IntentChecker = (intentName, params, {pane}):
     : getTypeNamesFromFilter(paneFilter, paneParams)
 
   const initialValueTemplates = typedSpec.initialValueTemplates || []
+
+  const child = (pane as List).child as DocumentNode | DocumentBuilder | ChildResolver
+  const isDocument =
+    child instanceof DocumentBuilder || (typeof child !== 'function' && child.type === 'document')
+
+  if (!isDocument && !(child as ChildResolver).RETURNS_EDITABLE_DOCUMENT) {
+    return false
+  }
 
   if (isCreate && params.template) {
     return initialValueTemplates.some(tpl => tpl.templateId === params.template)

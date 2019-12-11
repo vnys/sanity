@@ -10,6 +10,7 @@ import {
   DocumentFragmentResolveOptions
 } from './userDefinedStructure'
 import {getTemplateById} from '@sanity/initial-value-templates'
+import {ChildResolver} from './ChildResolver'
 
 interface DocumentOptions {
   id: string
@@ -145,9 +146,10 @@ export class DocumentBuilder implements Serializable {
       ).withHelpUrl(HELP_URL.DOCUMENT_ID_REQUIRED)
     }
 
-    const views = (this.spec.views && this.spec.views.length > 0 ? this.spec.views : [form()]).map(
-      (item, i) => maybeSerializeView(item, i, path)
-    )
+    const views = (this.spec.views && this.spec.views.length > 0
+      ? this.spec.views
+      : [form()]
+    ).map((item, i) => maybeSerializeView(item, i, path))
 
     const viewIds = views.map(view => view.id)
     const dupes = uniq(viewIds.filter((id, i) => viewIds.includes(id, i + 1)))
@@ -239,9 +241,7 @@ export function documentFromEditorWithInitialValue(
   )
 }
 
-export function getDefaultDocumentNode(
-  options: DocumentFragmentResolveOptions
-): DocumentBuilder {
+export function getDefaultDocumentNode(options: DocumentFragmentResolveOptions): DocumentBuilder {
   const {documentId, schemaType} = options
   const userDefined = getUserDefinedDefaultDocumentBuilder(options)
 
@@ -255,4 +255,19 @@ export function getDefaultDocumentNode(
   }
 
   return builder.schemaType(schemaType)
+}
+
+function isChildResolver(resolver: any): resolver is ChildResolver {
+  return typeof resolver === 'function' && typeof resolver.serialize === 'undefined'
+}
+
+export function returnsEditableDocument(
+  node: DocumentNode | DocumentBuilder | ChildResolver
+): DocumentNode | DocumentBuilder | ChildResolver {
+  if (!isChildResolver(node)) {
+    return node
+  }
+
+  node.RETURNS_EDITABLE_DOCUMENT = true
+  return node
 }

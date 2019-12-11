@@ -8,7 +8,7 @@ import {DocumentListBuilder} from './DocumentList'
 import {ListItemBuilder, ListItem} from './ListItem'
 import {DocumentTypeListBuilder, DocumentTypeListInput} from './DocumentTypeList'
 import {defaultIntentChecker} from './Intent'
-import {getDefaultDocumentNode} from './Document'
+import {getDefaultDocumentNode, returnsEditableDocument} from './Document'
 import {isList} from './List'
 
 const ListIcon = getListIcon()
@@ -72,6 +72,9 @@ export function getDocumentTypeList(
   const resolver = getDataAspectsForSchema(schema)
   const title = resolver.getDisplayName(typeName)
   const showIcons = shouldShowIcon(type)
+  const defaultChildResolver = returnsEditableDocument((documentId: string) =>
+    getDefaultDocumentNode({schemaType: typeName, documentId})
+  )
 
   return new DocumentTypeListBuilder()
     .id(spec.id || typeName)
@@ -88,10 +91,7 @@ export function getDocumentTypeList(
         {id: 'actions', title: 'Actions'}
       ]
     )
-    .child(
-      spec.child ||
-        ((documentId: string) => getDefaultDocumentNode({schemaType: typeName, documentId}))
-    )
+    .child(spec.child || defaultChildResolver)
     .canHandleIntent(spec.canHandleIntent || defaultIntentChecker)
     .menuItems(
       spec.menuItems || [
