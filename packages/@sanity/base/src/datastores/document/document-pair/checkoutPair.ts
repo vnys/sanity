@@ -6,7 +6,7 @@ import {Observable, merge} from 'rxjs'
 import client from 'part:@sanity/base/client'
 
 const isEventForDocId = (id: string) => (event: ListenerEvent): boolean =>
-  event.type !== 'reconnect' && event.type !== 'welcome' && event.documentId === id
+  event.type !== 'reconnect' && event.documentId === id
 
 export function doCommit(client, mutations) {
   return client.observable.dataRequest('mutate', mutations, {

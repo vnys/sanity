@@ -2,24 +2,24 @@ import {IdPair, SanityDocument} from '../types'
 import {filter, map, publishReplay, refCount} from 'rxjs/operators'
 import {cachedPair} from './cachedPair'
 import {BufferedDocumentEvent} from '../buffered-doc/createBufferedDocument'
-import {DocumentMutationEvent, DocumentRebaseEvent, SnapshotEvent} from '../buffered-doc/types'
+import {SnapshotEvent} from '../buffered-doc/types'
 import {createObservableCache} from '../utils/createObservableCache'
 import {Observable} from 'rxjs'
 import {DocumentVersion} from './checkoutPair'
 
 // return true if the event comes with a document snapshot
-function hasDocument(
+function isSnapshotEvent(
   event: BufferedDocumentEvent
-): event is (SnapshotEvent | DocumentRebaseEvent | DocumentMutationEvent) & {
+): event is SnapshotEvent & {
   version: 'published' | 'draft'
 } {
-  return event.type === 'snapshot' || event.type === 'rebase' || event.type === 'mutation'
+  return event.type === 'snapshot'
 }
 
 function withSnapshots(pair: DocumentVersion): DocumentVersionSnapshots {
   return {
     snapshots$: pair.events.pipe(
-      filter(hasDocument),
+      filter(isSnapshotEvent),
       map(event => event.document),
       publishReplay(1),
       refCount()
