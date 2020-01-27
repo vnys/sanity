@@ -1,18 +1,15 @@
 import {createObservableBufferedDocument} from './createObservableBufferedDocument'
-import {filter} from 'rxjs/operators'
-import {merge, Observable} from 'rxjs'
-import {ReconnectEvent} from '../types'
+import {Observable} from 'rxjs'
 import {
   CommitFunction,
-  SnapshotEvent,
   CommittedEvent,
+  DocumentMutationEvent,
   DocumentRebaseEvent,
-  DocumentMutationEvent
+  SnapshotEvent
 } from './types'
 import {ListenerEvent} from '../getPairListener'
 
-type BufferedDocumentEvent =
-  | ReconnectEvent
+export type BufferedDocumentEvent =
   | SnapshotEvent
   | DocumentRebaseEvent
   | DocumentMutationEvent
@@ -28,26 +25,22 @@ export interface BufferedDocumentWrapper {
   commit: () => Observable<never>
 }
 
-function isReconnect(event: ListenerEvent): event is ReconnectEvent {
-  return event.type === 'reconnect'
-}
 export const createBufferedDocument = (
   documentId: string,
-  serverEvents$: Observable<ListenerEvent>,
+  // consider naming it remoteEvent$
+  listenerEvent$: Observable<ListenerEvent>,
   doCommit: CommitFunction
 ): BufferedDocumentWrapper => {
-  const bufferedDocument = createObservableBufferedDocument(serverEvents$, doCommit)
-
-  const reconnects$ = serverEvents$.pipe(filter(isReconnect))
+  const bufferedDocument = createObservableBufferedDocument(listenerEvent$, doCommit)
 
   return {
-    events: merge(reconnects$, bufferedDocument.updates$),
+    events: bufferedDocument.updates$,
     patch(patches) {
       bufferedDocument.addMutations(patches.map(patch => ({patch: {...patch, id: documentId}})))
     },
     create(document) {
       bufferedDocument.addMutation({
-        create: Object.assign({id: documentId}, document)
+        create: document
       })
     },
     createIfNotExists(document) {

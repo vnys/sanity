@@ -42,6 +42,17 @@ interface CommitRequest {
 
 const COMMITTED_EVENT: CommittedEvent = {type: 'committed'}
 
+const assignUpdatedAt = document =>
+  document
+    ? {
+        ...document,
+        // todo: The following line is a temporary workaround for a problem with the mutator not
+        // setting updatedAt on patches applied optimistic when they are received from server
+        // can be removed when this is fixed
+        _updatedAt: new Date().toISOString()
+      }
+    : document
+
 // This is an observable interface for BufferedDocument in an attempt
 // to make it easier to work with the api provided by it
 export const createObservableBufferedDocument = (
@@ -63,7 +74,7 @@ export const createObservableBufferedDocument = (
     bufferedDocument.onMutation = ({mutation, remote}) => {
       updates$.next({
         type: 'mutation',
-        document: bufferedDocument.LOCAL,
+        document: assignUpdatedAt(bufferedDocument.LOCAL),
         mutations: mutation.mutations,
         origin: remote ? 'remote' : 'local'
       })
@@ -82,6 +93,7 @@ export const createObservableBufferedDocument = (
 
   const bufferedDocument$ = listenerEvent$.pipe(
     scan((bufferedDocument, listenerEvent): BufferedDocument => {
+      // consider renaming 'snapshot' to initial/welcome
       if (listenerEvent.type === 'snapshot') {
         if (bufferedDocument) {
           // we received a new snapshot and already got an old one. When we receive a snapshot again
@@ -113,11 +125,11 @@ export const createObservableBufferedDocument = (
   // this is where the side effects mandated by local actions actually happens
   const actionHandler$ = actions$.pipe(
     withLatestFrom(bufferedDocument$),
-    tap(([operation, bufferedDocument]) => {
-      if (operation.type === 'mutation') {
-        bufferedDocument.add(new Mutation({mutations: operation.mutations}))
+    tap(([action, bufferedDocument]) => {
+      if (action.type === 'mutation') {
+        bufferedDocument.add(new Mutation({mutations: action.mutations}))
       }
-      if (operation.type === 'commit') {
+      if (action.type === 'commit') {
         bufferedDocument.commit()
       }
     }),
@@ -155,7 +167,8 @@ export const createObservableBufferedDocument = (
         })
       )
     ),
-    mapTo(COMMITTED_EVENT)
+    mapTo(COMMITTED_EVENT),
+    share()
   )
 
   return {
