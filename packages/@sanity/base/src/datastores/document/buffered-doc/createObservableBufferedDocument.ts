@@ -48,24 +48,30 @@ const COMMITTED_EVENT: CommittedEvent = {type: 'committed'}
 // but we sometimes we need the most current _rev on the document in UI land, e.g.
 // in order to do optimistic locking on the edited document to make sure we publish the document the user
 // actually are looking at, and not the one currently at the server
-// Also - the mutator is not setting _updatedAt on patches applied optimisticly or
+// Also - the mutator is not setting _updatedAt on patches applied optimistically or
 // when they are received from server
 const getUpdatedSnapshot = (bufferedDocument: BufferedDocument) => {
   const LOCAL = bufferedDocument.LOCAL
   const HEAD = bufferedDocument.document.HEAD
-  if (!LOCAL || !HEAD || LOCAL._rev === HEAD._rev) {
+  if (!LOCAL) {
     return LOCAL
   }
 
   return {
     ...LOCAL,
-    _rev: HEAD._rev,
+    _rev: (HEAD || LOCAL)._rev,
     _updatedAt: new Date().toISOString()
   }
 }
 
 const toSnapshotEvent = (document): SnapshotEvent => ({type: 'snapshot', document})
 const getDocument = <T extends {document: any}>(event: T): T['document'] => event.document
+
+const DEBUG = false
+const noop = () => noop
+const log = DEBUG
+  ? (prefix, inspect?) => v => console.log(prefix, typeof inspect === 'function' ? inspect(v) : v)
+  : noop
 
 // This is an observable interface for BufferedDocument in an attempt
 // to make it easier to work with the api provided by it
@@ -179,10 +185,13 @@ export const createObservableBufferedDocument = (
 
   // A stream of this document's snapshot
   const snapshot$ = merge(
-    currentBufferedDocument$.pipe(map(bufferedDocument => bufferedDocument.LOCAL)),
-    mutations$.pipe(map(getDocument)),
-    snapshotAfterSync$,
-    rebase$.pipe(map(getDocument))
+    currentBufferedDocument$.pipe(
+      map(bufferedDocument => bufferedDocument.LOCAL),
+      tap(log('from current buffered'))
+    ),
+    mutations$.pipe(map(getDocument), tap(log('from mutations'))),
+    snapshotAfterSync$.pipe(tap(log('after sync mutations'))),
+    rebase$.pipe(map(getDocument)).pipe(tap(log('after rebase')))
   ).pipe(map(toSnapshotEvent), publishReplay(1), refCount())
 
   const commitResults$ = commits$.pipe(
