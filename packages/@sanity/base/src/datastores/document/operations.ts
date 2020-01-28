@@ -1,5 +1,5 @@
 import {concat, EMPTY, Observable, of, Subject} from 'rxjs'
-import {concatMap, filter, mergeMapTo, withLatestFrom, tap} from 'rxjs/operators'
+import {concatMap, filter, mergeMapTo, withLatestFrom} from 'rxjs/operators'
 
 import * as operations from './document-pair/operations/index'
 import {PublicOperations} from './document-pair/operations/api'
@@ -17,10 +17,6 @@ export function createEventHandler<T>(): [Observable<T>, (nextValue: T) => void]
 }
 
 const [_operations$, _emitOperation] = createEventHandler<Operation>()
-
-const phase = (phase, op) => {
-  return of({phase, op})
-}
 
 const toObservable = (value: undefined | Observable<any>) =>
   typeof value === 'undefined' ? of(null) : value

@@ -8,7 +8,6 @@ import {editStateOf} from './document-pair/editState'
 import {editOpsOf} from './document-pair/editOps'
 import {documentEventsFor} from './document-pair/documentEvents'
 import {validationFor} from './document-pair/validation'
-import {documentOperationResults} from './operations'
 
 export function getIdPairFromPublished(publishedId: string): IdPair {
   if (isDraftId(publishedId)) {
