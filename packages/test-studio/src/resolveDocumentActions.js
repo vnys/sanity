@@ -33,8 +33,8 @@ function PublishNowAction({type, id, onComplete}) {
 
 export default function resolveDocumentActions(editState, type) {
   return [
-    PublishNowAction,
     ...defaultActions,
+    PublishNowAction,
     TestAction,
     PopoverDialogAction,
     ModalDialogAction,
