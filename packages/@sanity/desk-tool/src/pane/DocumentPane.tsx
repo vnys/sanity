@@ -29,6 +29,7 @@ import {DocumentActionShortcuts} from '../components/DocumentActionShortcuts'
 import styles from './styles/Editor.css'
 import {Validation} from './Editor/Validation'
 import LanguageFilter from 'part:@sanity/desk-tool/language-select-component?'
+import {DocumentOperationResults} from './DocumentOperations'
 
 declare const __DEV__: boolean
 
@@ -597,9 +598,12 @@ export default class DocumentPane extends React.PureComponent<Props, State> {
     }
 
     return (
-      <PreviewFields document={value} type={type} fields={['title']}>
-        {({title}) => (title ? <span>{title}</span> : <em>Untitled</em>)}
-      </PreviewFields>
+      <>
+        <PreviewFields document={value} type={type} fields={['title']}>
+          {({title}) => (title ? <span>{title}</span> : <em>Untitled</em>)}
+        </PreviewFields>
+        <br />@{value ? value._rev : '?'}
+      </>
     )
   }
 
@@ -653,8 +657,8 @@ export default class DocumentPane extends React.PureComponent<Props, State> {
   }
 
   renderFooter = () => {
-    const {initialValue, options} = this.props
-    const value = this.props.value || initialValue
+    const {initialValue, draft, published, options} = this.props
+    const value = draft || published || initialValue
 
     return (
       <DocumentStatusBar
@@ -864,6 +868,7 @@ export default class DocumentPane extends React.PureComponent<Props, State> {
           {!isConnected && (
             <Snackbar kind="warning" isPersisted title="Connection lost. Reconnecting…" />
           )}
+          <DocumentOperationResults id={options.id} type={options.type} />
         </TabbedPane>
       </DocumentActionShortcuts>
     )

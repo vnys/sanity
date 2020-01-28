@@ -8,14 +8,16 @@ import {editStateOf} from './document-pair/editState'
 import {editOpsOf} from './document-pair/editOps'
 import {documentEventsFor} from './document-pair/documentEvents'
 import {validationFor} from './document-pair/validation'
+import {documentOperationResults} from './operations'
 
-function getIdPairFromPublished(publishedId: string): IdPair {
+export function getIdPairFromPublished(publishedId: string): IdPair {
   if (isDraftId(publishedId)) {
     throw new Error('editOpsOf does not expect a draft id.')
   }
 
   return {publishedId, draftId: getDraftId(publishedId)}
 }
+
 // Todo: Flush / commit before publish
 
 export default {

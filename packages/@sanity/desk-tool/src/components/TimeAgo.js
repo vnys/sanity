@@ -33,7 +33,7 @@ export function formatTimeAgo(date) {
   return 'just now'
 }
 
-export default class TimeAgo extends React.PureComponent {
+export default class TimeAgo extends React.Component {
   static propTypes = {
     refreshInterval: PropTypes.number,
     time: PropTypes.string.isRequired

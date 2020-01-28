@@ -1,5 +1,5 @@
 import {useDocumentOperation} from '@sanity/react-hooks'
-import * as DefaultActions from 'part:@sanity/base/document-actions'
+import {defaultActions} from 'part:@sanity/base/document-actions'
 import {
   ConfirmDialogAction,
   ModalDialogAction,
@@ -33,8 +33,8 @@ function PublishNowAction({type, id, onComplete}) {
 
 export default function resolveDocumentActions(editState, type) {
   return [
-    ...Object.values(DefaultActions),
     PublishNowAction,
+    ...defaultActions,
     TestAction,
     PopoverDialogAction,
     ModalDialogAction,
