@@ -55,10 +55,12 @@ SanityFormBuilderContext.createPatchChannel = () => {
   const patchChannel = FormBuilderContext.createPatchChannel()
   return {
     receiveEvent: event => {
-      if (event.type !== 'rebase') {
+      // Only deal with mutation and rebase events
+      if (event.type !== 'mutation' && event.type !== 'rebase') {
         return
       }
-      if (event.type !== 'mutation' && event.type !== 'rebase') {
+      // Ignore rebases from the mutatator where document is null (it's an valid event there)
+      if (event.type === 'rebase' && event.document === null) {
         return
       }
       patchChannel.receivePatches(
