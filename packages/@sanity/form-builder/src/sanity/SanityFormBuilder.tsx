@@ -3,6 +3,8 @@ import SanityFormBuilderContext from './SanityFormBuilderContext'
 import {FormBuilderInput} from '../FormBuilderInput'
 import {Marker, Type} from '../typedefs'
 import {Path} from '../typedefs/path'
+import {setLocation} from 'part:@sanity/base/presence'
+
 type PatchChannel = {
   subscribe: () => () => {}
   receivePatches: (patches: Array<any>) => void
@@ -25,6 +27,7 @@ export default class SanityFormBuilder extends React.Component<Props, {}> {
   static createPatchChannel = SanityFormBuilderContext.createPatchChannel
 
   _input: FormBuilderInput | null
+
   setInput = (input: FormBuilderInput | null) => {
     this._input = input
   }
@@ -32,6 +35,17 @@ export default class SanityFormBuilder extends React.Component<Props, {}> {
     const {autoFocus} = this.props
     if (this._input && autoFocus) {
       this._input.focus()
+    }
+  }
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.focusPath !== prevProps.focusPath) {
+      setLocation([
+        {
+          namespace: 'formBuilder',
+          documentId: this.props.value._id,
+          path: this.props.focusPath
+        }
+      ])
     }
   }
   render() {

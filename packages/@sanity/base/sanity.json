@@ -371,6 +371,10 @@
       "path": "datastores/presence"
     },
     {
+      "name": "part:@sanity/base/hooks/presence",
+      "path": "hooks/usePresence"
+    },
+    {
       "name": "part:@sanity/base/project",
       "path": "datastores/project"
     },
