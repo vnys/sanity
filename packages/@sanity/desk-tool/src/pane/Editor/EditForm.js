@@ -24,7 +24,8 @@ export default class EditForm extends React.PureComponent {
     patchChannel: PropTypes.object.isRequired,
     readOnly: PropTypes.bool.isRequired,
     schema: PropTypes.object.isRequired,
-    type: PropTypes.shape({name: PropTypes.string}).isRequired
+    type: PropTypes.shape({name: PropTypes.string}).isRequired,
+    presenceObserver: PropTypes.any
   }
 
   static defaultProps = {
@@ -62,6 +63,7 @@ export default class EditForm extends React.PureComponent {
             patchChannel={patchChannel}
             value={value || {_type: type}}
             type={type}
+            presenceObserver={this.props.presenceObserver}
             filterField={filterField}
             readOnly={readOnly}
             onBlur={onBlur}

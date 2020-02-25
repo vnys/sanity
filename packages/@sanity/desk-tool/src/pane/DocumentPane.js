@@ -254,6 +254,7 @@ export default withInitialValue(
           this.handleCloseHistory(context)
         }
       }
+      this.presenceMap = []
 
       const published$ = this.published.events
       const draft$ = this.draft.events.pipe(tap(this.receiveDraftEvent))
@@ -479,6 +480,10 @@ export default withInitialValue(
         !this.props.isCollapsed &&
         this.state.historyState.isEnabled
       )
+    }
+
+    handleIntersection = (entries, observer) => {
+      console.log('handleIntersection', entries)
     }
 
     componentDidMount() {
@@ -1403,7 +1408,12 @@ export default withInitialValue(
 
       const formProps = {
         ...viewProps,
-
+        presenceObserver: {
+          observe: (element, field) => {
+            this.presenceMap.push({element, field})
+            this.interSesctionObserver.observe(element)
+          }
+        },
         patchChannel: this.patchChannel,
         initialValue,
         validationPending,
@@ -1440,6 +1450,30 @@ export default withInitialValue(
         default:
           return null
       }
+    }
+
+    registerIntersectionObserver = element => {
+      console.log('Registering observer for ', element)
+      const options = {
+        root: element,
+        rootMargin: '0px',
+        threshold: 1.0,
+        trackVisibility: true,
+        delay: 100
+      }
+      this.interSesctionObserver = new IntersectionObserver(this.handleIntersection, options)
+      this.forceUpdate()
+    }
+
+    handleIntersection = (entries, observer) => {
+      entries.forEach(entry => {
+        const field = this.presenceMap.find(item => item.element === entry.target)
+        if (!entry.isIntersecting) {
+          console.log(`Showing presence outside for: ${field.field.props.type.title}`)
+        } else {
+          console.log(`Not showing presence outside for: ${field.field.props.type.title}`)
+        }
+      })
     }
 
     // eslint-disable-next-line complexity
@@ -1554,6 +1588,7 @@ export default withInitialValue(
             renderActions={this.renderActions}
             isClosable={isClosable}
             hasSiblings={this.context.hasGroupSiblings}
+            registerIntersectionObserver={this.registerIntersectionObserver}
           >
             {this.renderHistorySpinner()}
             {this.renderCurrentView()}

@@ -24,6 +24,7 @@ type Props = {
   filterField?: Function
   onKeyUp?: (ev: React.KeyboardEvent) => void
   onKeyPress?: (ev: React.KeyboardEvent) => void
+  presenceObserver?: any
 }
 const ENABLE_CONTEXT = () => {}
 
@@ -176,14 +177,12 @@ export class FormBuilderInput extends React.Component<Props> {
     const {
       onChange,
       onFocus,
-      onBlur,
       path,
       readOnly,
       value,
       markers,
       type,
       level,
-      focusPath,
       isRoot,
       ...rest
     } = this.props
@@ -223,6 +222,7 @@ export class FormBuilderInput extends React.Component<Props> {
           onBlur={this.handleBlur}
           level={level}
           ref={this.setInput}
+          presenceObserver={this.props.presenceObserver}
         />
       </div>
     )

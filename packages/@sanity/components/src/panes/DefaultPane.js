@@ -43,6 +43,7 @@ class Pane extends React.PureComponent {
     hasSiblings: PropTypes.bool,
     onAction: PropTypes.func,
     renderActions: PropTypes.func,
+    registerIntersectionObserver: PropTypes.func,
     menuItems: PropTypes.arrayOf(
       PropTypes.shape({
         showAsAction: PropTypes.oneOfType([
@@ -320,7 +321,11 @@ class Pane extends React.PureComponent {
     )
 
     const mainChildren = isScrollable ? (
-      <ScrollContainer className={styles.scrollContainer} tabIndex={-1}>
+      <ScrollContainer
+        className={styles.scrollContainer}
+        tabIndex={-1}
+        registerIntersectionObserver={this.props.registerIntersectionObserver}
+      >
         {children}
       </ScrollContainer>
     ) : (

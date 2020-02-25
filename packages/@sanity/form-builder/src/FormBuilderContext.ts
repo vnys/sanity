@@ -58,6 +58,7 @@ interface Props {
   }
   resolveInputComponent: (type: Type) => React.ComponentType
   resolvePreviewComponent: (type: Type) => React.ComponentType
+  presenceObserver: any
 }
 export default class FormBuilderContext extends React.Component<Props> {
   static createPatchChannel = () => {
@@ -73,7 +74,8 @@ export default class FormBuilderContext extends React.Component<Props> {
       schema: PropTypes.object,
       resolveInputComponent: PropTypes.func,
       document: PropTypes.any
-    })
+    }),
+    presenceObserver: PropTypes.any
   }
 
   getDocument = () => {
@@ -91,7 +93,7 @@ export default class FormBuilderContext extends React.Component<Props> {
   })
 
   getChildContext = memoize(() => {
-    const {schema, filterField, patchChannel} = this.props
+    const {schema, filterField, patchChannel, presenceObserver} = this.props
     return {
       filterField: filterField,
       getValuePath: () => [],
@@ -109,7 +111,8 @@ export default class FormBuilderContext extends React.Component<Props> {
         resolveInputComponent: this.resolveInputComponent,
         resolvePreviewComponent: this.resolvePreviewComponent,
         getDocument: this.getDocument
-      }
+      },
+      presenceObserver
     }
   })
 

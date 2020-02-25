@@ -12,6 +12,7 @@ type Props = {
   schema: Record<string, any>
   patchChannel: any
   children: React.ReactElement
+  presenceObserver: any
 }
 
 export default function SanityFormBuilderContext(props: Props) {
@@ -23,6 +24,7 @@ export default function SanityFormBuilderContext(props: Props) {
       patchChannel={props.patchChannel}
       resolveInputComponent={inputResolver}
       resolvePreviewComponent={previewResolver}
+      presenceObserver={props.presenceObserver}
     >
       <WithPresence presence={presence}>{props.children}</WithPresence>
     </FormBuilderContext>

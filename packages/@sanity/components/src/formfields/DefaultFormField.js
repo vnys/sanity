@@ -25,7 +25,8 @@ export default class DefaultFormField extends React.Component {
         type: PropTypes.string
       })
     ),
-    type: PropTypes.any
+    type: PropTypes.any,
+    fieldObserver: PropTypes.any
   }
 
   static defaultProps = {

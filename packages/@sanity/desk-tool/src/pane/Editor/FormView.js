@@ -132,6 +132,7 @@ export default class FormView extends React.PureComponent {
             readOnly={readOnly}
             schema={schema}
             type={schemaType}
+            presenceObserver={this.props.presenceObserver}
           />
         )}
 

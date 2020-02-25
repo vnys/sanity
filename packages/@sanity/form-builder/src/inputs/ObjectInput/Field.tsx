@@ -4,6 +4,7 @@ import {FormBuilderInput} from '../../FormBuilderInput'
 import InvalidValue from '../InvalidValueInput'
 import {resolveTypeName} from '../../utils/resolveTypeName'
 import styles from './styles/Field.css'
+
 type FieldProps = {
   field: any
   value?: any
@@ -15,11 +16,14 @@ type FieldProps = {
   readOnly?: boolean
   markers?: any[]
   level?: number
+  presenceObserver: any
 }
 // This component renders a single type in an object type. It emits onChange events telling the owner about the name of the type
 // that changed. This gives the owner an opportunity to use the same event handler function for all of its fields
 export default class Field extends React.Component<FieldProps> {
   _input: any
+  _rootElm: React.RefObject<HTMLDivElement> = React.createRef()
+  _observerRegistered = false
   static defaultProps = {
     level: 0,
     focusPath: []
@@ -36,6 +40,19 @@ export default class Field extends React.Component<FieldProps> {
   setInput = input => {
     this._input = input
   }
+
+  componentDidUpdate() {
+    if (
+      !this._observerRegistered &&
+      this.props.presenceObserver &&
+      this._rootElm &&
+      this._rootElm.current
+    ) {
+      this.props.presenceObserver.observe(this._rootElm.current, this._input)
+      this._observerRegistered = true
+    }
+  }
+
   render() {
     const {
       value,
@@ -71,7 +88,7 @@ export default class Field extends React.Component<FieldProps> {
       }
     }
     return (
-      <div className={styles.root}>
+      <div className={styles.root} ref={this._rootElm}>
         <FormBuilderInput
           value={value}
           type={field.type}
@@ -84,6 +101,7 @@ export default class Field extends React.Component<FieldProps> {
           filterField={filterField}
           markers={markers}
           level={level}
+          presenceObserver={this.props.presenceObserver}
           ref={this.setInput}
         />
       </div>

@@ -42,6 +42,7 @@ type ObjectInputProps = {
   readOnly?: boolean
   isRoot?: boolean
   filterField?: (...args: any[]) => any
+  presenceObserver?: any
 }
 export default class ObjectInput extends React.PureComponent<ObjectInputProps, {}> {
   _firstField: any
@@ -100,6 +101,7 @@ export default class ObjectInput extends React.PureComponent<ObjectInputProps, {
         readOnly={readOnly}
         filterField={filterField}
         ref={index === 0 && this.setFirstField}
+        presenceObserver={this.props.presenceObserver}
       />
     )
   }

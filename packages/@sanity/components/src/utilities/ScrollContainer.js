@@ -7,7 +7,8 @@ export default class ScrollContainer extends React.PureComponent {
     className: PropTypes.string,
     children: PropTypes.node,
     onScroll: PropTypes.func,
-    tabIndex: PropTypes.number
+    tabIndex: PropTypes.number,
+    registerIntersectionObserver: PropTypes.func
   }
 
   static defaultProps = {
@@ -34,6 +35,9 @@ export default class ScrollContainer extends React.PureComponent {
   componentDidMount() {
     if (this.props.onScroll) {
       this._scrollContainerElement.addEventListener('scroll', this.handleScroll, {passive: true})
+    }
+    if (this.props.registerIntersectionObserver) {
+      this.props.registerIntersectionObserver(this._scrollContainerElement)
     }
   }
 

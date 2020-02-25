@@ -22,6 +22,7 @@ type Props = {
   onBlur: () => void
   autoFocus: boolean
   focusPath: Path
+  presenceObserver: any
 }
 export default class SanityFormBuilder extends React.Component<Props, {}> {
   static createPatchChannel = SanityFormBuilderContext.createPatchChannel
@@ -60,10 +61,16 @@ export default class SanityFormBuilder extends React.Component<Props, {}> {
       onFocus,
       onBlur,
       focusPath,
-      filterField
+      filterField,
+      presenceObserver
     } = this.props
     return (
-      <SanityFormBuilderContext value={value} schema={schema} patchChannel={patchChannel}>
+      <SanityFormBuilderContext
+        value={value}
+        schema={schema}
+        patchChannel={patchChannel}
+        presenceObserver={presenceObserver}
+      >
         <FormBuilderInput
           type={type}
           onChange={onChange}
@@ -77,6 +84,7 @@ export default class SanityFormBuilder extends React.Component<Props, {}> {
           readOnly={readOnly}
           filterField={filterField}
           ref={this.setInput}
+          presenceObserver={presenceObserver}
         />
       </SanityFormBuilderContext>
     )
