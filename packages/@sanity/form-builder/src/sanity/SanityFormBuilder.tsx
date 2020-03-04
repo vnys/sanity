@@ -4,6 +4,7 @@ import {FormBuilderInput} from '../FormBuilderInput'
 import {Marker, Type} from '../typedefs'
 import {Path} from '../typedefs/path'
 import * as gradientPatchAdapter from './utils/gradientPatchAdapter'
+import VerticalActivityDock from 'part:@sanity/components/activity/vertical-dock'
 
 type PatchChannel = {
   subscribe: () => () => {}
@@ -22,15 +23,18 @@ type Props = {
   onBlur: () => void
   autoFocus: boolean
   focusPath: Path
+  activity: any
 }
 
 export default class SanityFormBuilder extends React.Component<Props, {}> {
   static createPatchChannel = SanityFormBuilderContext.createPatchChannel
 
   _input: FormBuilderInput | null
+
   setInput = (input: FormBuilderInput | null) => {
     this._input = input
   }
+
   componentDidMount() {
     const {autoFocus} = this.props
     if (this._input && autoFocus) {
@@ -53,24 +57,27 @@ export default class SanityFormBuilder extends React.Component<Props, {}> {
       onFocus,
       onBlur,
       focusPath,
-      filterField
+      filterField,
+      activity
     } = this.props
     return (
       <SanityFormBuilderContext value={value} schema={schema} patchChannel={patchChannel}>
-        <FormBuilderInput
-          type={type}
-          onChange={this.handleChange}
-          level={0}
-          value={value}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          markers={markers}
-          focusPath={focusPath}
-          isRoot
-          readOnly={readOnly}
-          filterField={filterField}
-          ref={this.setInput}
-        />
+        <VerticalActivityDock activity={activity}>
+          <FormBuilderInput
+            type={type}
+            onChange={this.handleChange}
+            level={0}
+            value={value}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            markers={markers}
+            focusPath={focusPath}
+            isRoot
+            readOnly={readOnly}
+            filterField={filterField}
+            ref={this.setInput}
+          />
+        </VerticalActivityDock>
       </SanityFormBuilderContext>
     )
   }
