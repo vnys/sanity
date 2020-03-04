@@ -1097,16 +1097,16 @@
       "path": "tabs/TabPanel.js"
     },
     {
-      "name": "part:@sanity/components/presence/presence-dock",
-      "path": "presence/PresenceDock"
+      "name": "part:@sanity/components/activity/vertical-dock",
+      "path": "activity/VerticalActivityDock"
     },
     {
-      "name": "part:@sanity/components/presence/presence-avatar",
-      "path": "presence/Avatar"
+      "name": "part:@sanity/components/activity/activity",
+      "path": "activity/Activity"
     },
     {
-      "name": "part:@sanity/components/presence/presence-container",
-      "path": "presence/PresenceContainer"
+      "name": "part:@sanity/components/activity/activity-container",
+      "path": "activity/ActivityContainer"
     }
   ]
 }
