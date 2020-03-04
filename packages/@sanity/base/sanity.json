@@ -946,6 +946,10 @@
     {
       "implements": "part:@sanity/base/component",
       "path": "styles/variables/story.js"
+    },
+    {
+      "name": "part:@sanity/base/presence",
+      "path": "datastores/presence"
     }
   ]
 }
