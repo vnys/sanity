@@ -9,13 +9,18 @@ import {Type, Marker} from './typedefs'
 
 const NO_MARKERS: Marker[] = []
 
-type Props = {
+interface Activity {
+  id: string
+}
+
+interface Props {
   value: any
   type: Type
   onChange: (arg0: PatchEvent) => void
   onFocus: (arg0: Path) => void
   onBlur: () => void
   readOnly: boolean
+  activity?: Activity[]
   focusPath: Path
   markers: Marker[]
   level: number
@@ -25,6 +30,7 @@ type Props = {
   onKeyUp?: (ev: React.KeyboardEvent) => void
   onKeyPress?: (ev: React.KeyboardEvent) => void
 }
+
 const ENABLE_CONTEXT = () => {}
 
 function getDisplayName(component) {
@@ -183,6 +189,7 @@ export class FormBuilderInput extends React.Component<Props> {
       markers,
       type,
       level,
+      activity,
       focusPath,
       isRoot,
       ...rest
@@ -218,6 +225,7 @@ export class FormBuilderInput extends React.Component<Props> {
           readOnly={readOnly || type.readOnly}
           markers={childMarkers.length === 0 ? NO_MARKERS : childMarkers}
           type={type}
+          activity={activity}
           onChange={this.handleChange}
           onFocus={this.handleFocus}
           onBlur={this.handleBlur}
