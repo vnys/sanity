@@ -1,6 +1,7 @@
 import config from 'config:sanity'
 import configureClient from 'part:@sanity/base/configure-client?'
 import sanityClient from '@sanity/client'
+import {getRpcClient} from '../jsonrpc/jsonRpcClient'
 
 const deprecationMessage = `[deprecation] The Sanity client is now exposed in CommonJS format.
 
@@ -24,6 +25,10 @@ Object.defineProperty(configuredClient, 'default', {
     console.warn(deprecationMessage)
     return configuredClient
   }
+})
+
+getRpcClient(configuredClient).then(jsonRpc => {
+  window.jsonRpc = jsonRpc
 })
 
 // Expose as CJS to allow Node scripts to consume it without `.default`

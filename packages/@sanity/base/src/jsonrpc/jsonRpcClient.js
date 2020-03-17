@@ -1,15 +1,12 @@
 import {AsyncSubject} from 'rxjs'
 import {generate as randomString} from 'randomstring'
+import {memoize} from 'lodash'
+import ReconnectingWebsocket from './ReconnectingWebsocket'
 
 const CONNECT_TIMEOUT_MS = 5000
-const CLOSE_SERVICE_RESTART = 1012
 
-const hasWebSocket = typeof window !== 'undefined' && typeof window.WebSocket === 'function'
-
-export const getRpcClient = client => {
+export const getRpcClient = memoize(client => {
   let ws
-  let closed = true
-  let connected = false
   const pending = new Map()
 
   function getId() {
@@ -30,21 +27,17 @@ export const getRpcClient = client => {
 
   function send(data) {
     if (!connected) {
-      throw new Error(`Not connected`)
+      throw new Error('Not connected')
     }
 
     ws.send(data)
   }
 
   function close() {
-    if (connected) {
-      ws.close()
-      for (const subject of pending.values()) {
-        subject.complete()
-      }
+    ws.close()
+    for (const subject of pending.values()) {
+      subject.complete()
     }
-
-    closed = true
   }
 
   function onNotification(msg) {
@@ -126,16 +119,16 @@ export const getRpcClient = client => {
   }
 
   function connect() {
-    closed = false
+    let hasBeenConnected = false
 
     return new Promise((resolve, reject) => {
-      if (!hasWebSocket) {
+      if (!ReconnectingWebsocket) {
         throw new Error('No WebSocket implementation available')
       }
 
       const api = {request, subscribe, close}
 
-      if (ws && connected) {
+      if (ws) {
         resolve(api)
         return
       }
@@ -148,24 +141,32 @@ export const getRpcClient = client => {
         new Error('Timed out trying to connect')
       )
 
-      ws = new WebSocket(url)
-
-      // @todo reconnect logic
-      ws.addEventListener('close', err => {
+      const initialCloseHandler = () => {
         clearTimeout(connectTimeout)
-        connected = false
-        console.error('Eeek, it closed!', err)
-      })
+        ws.removeEventListener('close', initialCloseHandler)
+        if (!hasBeenConnected) {
+          reject(new Error('Failed to connect to WebSocket'))
+          return
+        }
+      }
+
+      ws = new ReconnectingWebsocket(url)
+      ws.addEventListener('close', initialCloseHandler)
 
       ws.addEventListener('message', event => {
-        const msg = tryParse(event.data)
+        const data = event.data.toString()
+        if (data === '♥') {
+          return
+        }
+
+        const msg = tryParse(data)
         if (!msg || !msg.jsonrpc) {
           return
         }
 
         if (msg.method === 'welcome') {
           clearTimeout(connectTimeout)
-          connected = true
+          hasBeenConnected = true
           resolve(api)
           return
         }
@@ -176,4 +177,4 @@ export const getRpcClient = client => {
   }
 
   return connect()
-}
+})
