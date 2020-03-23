@@ -35,6 +35,7 @@ function prepareMutationEvent(event) {
 }
 
 function prepareRebaseEvent(event) {
+  console.log('rebase', event)
   return {
     snapshot: event.document,
     patches: gradientPatchAdapter.toFormBuilder('internal', [

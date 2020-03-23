@@ -420,6 +420,7 @@ export default function createPatchesToChange(
     controller.setValue(editorValue)
 
     if (patch.origin === 'internal' && patch.type === 'set' && isEqual(patch.path, [])) {
+      console.log('patchToOperations rebase', patch)
       return rebasePatch(patch, controller)
     }
 

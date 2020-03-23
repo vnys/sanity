@@ -331,6 +331,7 @@ export default class Document {
     }
     const changed = !isEqual(this.EDGE, oldEdge)
     if (changed && this.onRebase) {
+      console.log('Mutator rebasing')
       this.onRebase(this.EDGE)
     }
   }
