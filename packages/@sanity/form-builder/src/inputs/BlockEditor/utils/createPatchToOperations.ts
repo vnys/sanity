@@ -68,6 +68,9 @@ function findTextNodeFromPathKey(blockNode: SlateNode, pathKey: string) {
 
 // Helper function to find the last known node to the editor inside a patch path
 function findLastKnownEditorNodeInPath(block, patchPath) {
+  if (!block) {
+    return null
+  }
   let node = null
   let pIndex = patchPath.length - 1
   while (node === null && pIndex >= 0) {
