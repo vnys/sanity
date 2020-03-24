@@ -142,12 +142,16 @@ export default function UndoRedoPlugin(options: Options) {
         stack.redo.push(item)
         return handleUndoItem(editor, stack.undo.pop(), operations)
       }
-      operations.forEach(op => {
-        op.__isUndoRedo = 'undo'
-        editor.applyOperation(op)
-      })
-      moveCursorUndo(editor, item)
-      stack.redo.push(item)
+      try {
+        operations.forEach(op => {
+          op.__isUndoRedo = 'undo'
+          editor.applyOperation(op)
+        })
+        moveCursorUndo(editor, item)
+        stack.redo.push(item)
+      } catch (err) {
+        console.warn('Unable to do redo', item)
+      }
       return editor
     }
     // If the undo step was invalidated do next step
@@ -169,12 +173,16 @@ export default function UndoRedoPlugin(options: Options) {
         stack.undo.push(item)
         return handleRedoItem(editor, stack.redo.pop(), operations)
       }
-      operations.forEach(op => {
-        op.__isUndoRedo = 'redo'
-        editor.applyOperation(op)
-      })
-      moveCursorRedo(editor, item)
-      stack.undo.push(item)
+      try {
+        operations.forEach(op => {
+          op.__isUndoRedo = 'redo'
+          editor.applyOperation(op)
+        })
+        moveCursorRedo(editor, item)
+        stack.undo.push(item)
+      } catch (err) {
+        console.warn('Unable to do redo', item)
+      }
       return editor
     }
     // If the redo step was invalidated do next step
