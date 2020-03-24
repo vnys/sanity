@@ -417,7 +417,7 @@ export default function createPatchesToChange(
   // eslint-disable-next-line complexity
   return function patchToOperations(patch: Patch, editorValue: SlateValue) {
     controller.flush() // Must flush here or we end up with duplicate operations
-    controller.setValue(editorValue)
+    controller.setValue(editorValue, {normalize: false})
 
     if (patch.origin === 'internal' && patch.type === 'set' && isEqual(patch.path, [])) {
       console.log('patchToOperations rebase', patch)

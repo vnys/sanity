@@ -209,7 +209,7 @@ export default withPatchSubscriber(
       }
     }
     restoreCurrentValue(lastKnownSelection: SlateSelection | null) {
-      this._controller.setValue(deserialize(this.props.value, this.props.type))
+      this._controller.setValue(deserialize(this.props.value, this.props.type), {normalize: false})
       if (lastKnownSelection) {
         this._controller.select(lastKnownSelection)
       }
