@@ -195,6 +195,8 @@ export default withRouterHOC(
     }
 
     render() {
+
+      console.log('wut')
       return <SchemaErrorReporter>{this.renderContent}</SchemaErrorReporter>
     }
   }
