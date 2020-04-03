@@ -1,4 +1,4 @@
-import {AsyncSubject} from 'rxjs'
+import {AsyncSubject, Observable} from 'rxjs'
 import {generate as randomString} from 'randomstring'
 import {memoize} from 'lodash'
 import ReconnectingWebsocket from './ReconnectingWebsocket'
@@ -26,10 +26,9 @@ export const getRpcClient = memoize(client => {
   }
 
   function send(data) {
-    if (!connected) {
-      throw new Error('Not connected')
-    }
-
+    // if (!connected) {
+    //   throw new Error('Not connected')
+    // }
     ws.send(data)
   }
 
@@ -120,61 +119,53 @@ export const getRpcClient = memoize(client => {
 
   function connect() {
     let hasBeenConnected = false
+    if (!ReconnectingWebsocket) {
+      throw new Error('No WebSocket implementation available')
+    }
 
-    return new Promise((resolve, reject) => {
-      if (!ReconnectingWebsocket) {
-        throw new Error('No WebSocket implementation available')
+    const api = {request, subscribe, close}
+
+    if (ws) {
+      return api
+    }
+
+    const {dataset} = client.config()
+    const url = client.getUrl(`/socket/${dataset}`).replace(/^http/, 'ws')
+    const connectTimeout = setTimeout(() => {
+      throw new Error('Timed out trying to connect')
+    }, CONNECT_TIMEOUT_MS)
+
+    const initialCloseHandler = () => {
+      clearTimeout(connectTimeout)
+      ws.removeEventListener('close', initialCloseHandler)
+      if (!hasBeenConnected) {
+        throw new Error('Failed to connect to WebSocket')
       }
+    }
 
-      const api = {request, subscribe, close}
+    ws = new ReconnectingWebsocket(url)
+    ws.addEventListener('close', initialCloseHandler)
 
-      if (ws) {
-        resolve(api)
+    ws.addEventListener('message', event => {
+      const data = event.data.toString()
+      if (data === '♥') {
         return
       }
 
-      const {dataset} = client.config()
-      const url = client.getUrl(`/socket/${dataset}`).replace(/^http/, 'ws')
-      const connectTimeout = setTimeout(
-        reject,
-        CONNECT_TIMEOUT_MS,
-        new Error('Timed out trying to connect')
-      )
-
-      const initialCloseHandler = () => {
-        clearTimeout(connectTimeout)
-        ws.removeEventListener('close', initialCloseHandler)
-        if (!hasBeenConnected) {
-          reject(new Error('Failed to connect to WebSocket'))
-          return
-        }
+      const msg = tryParse(data)
+      if (!msg || !msg.jsonrpc) {
+        return
       }
 
-      ws = new ReconnectingWebsocket(url)
-      ws.addEventListener('close', initialCloseHandler)
+      if (msg.method === 'welcome') {
+        clearTimeout(connectTimeout)
+        hasBeenConnected = true
+        return api
+      }
 
-      ws.addEventListener('message', event => {
-        const data = event.data.toString()
-        if (data === '♥') {
-          return
-        }
-
-        const msg = tryParse(data)
-        if (!msg || !msg.jsonrpc) {
-          return
-        }
-
-        if (msg.method === 'welcome') {
-          clearTimeout(connectTimeout)
-          hasBeenConnected = true
-          resolve(api)
-          return
-        }
-
-        onMessage(msg)
-      })
+      onMessage(msg)
     })
+    return api
   }
-
   return connect()
 })

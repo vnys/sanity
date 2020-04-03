@@ -27,9 +27,8 @@ Object.defineProperty(configuredClient, 'default', {
   }
 })
 
-getRpcClient(configuredClient).then(jsonRpc => {
-  window.jsonRpc = jsonRpc
-})
+configuredClient.jsonRpc = getRpcClient(configuredClient)
+window.jsonRpc = configuredClient.jsonRpc
 
 // Expose as CJS to allow Node scripts to consume it without `.default`
 // eslint-disable-next-line import/no-commonjs
