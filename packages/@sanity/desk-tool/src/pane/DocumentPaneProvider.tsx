@@ -1,6 +1,7 @@
 import * as React from 'react'
 import DocumentPane from './DocumentPane'
 import withInitialValue from '../utils/withInitialValue'
+import {clients$ as presenceClients$} from 'part:@sanity/base/presence'
 import {
   useConnectionState,
   useDocumentOperation,
@@ -52,6 +53,10 @@ export const DocumentPaneProvider = withInitialValue((props: Props) => {
     },
     [patch]
   )
+
+  presenceClients$.subscribe(next => {
+    console.log(next)
+  })
 
   const value = (editState && (editState.draft || editState.published)) || props.initialValue
   return (
