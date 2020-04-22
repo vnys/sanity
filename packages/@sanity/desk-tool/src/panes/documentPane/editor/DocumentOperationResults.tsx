@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import * as React from 'react'
 import Snackbar from 'part:@sanity/components/snackbar/default'
 import {useDocumentOperationEvent} from '@sanity/react-hooks'
 
-function getOpErrorTitle(op) {
+function getOpErrorTitle(op: any) {
   if (op === 'delete') {
     return `An error occurred while attempting to delete this document.
       This usually means that there are other documents that refers to it.`
@@ -16,7 +17,7 @@ function getOpErrorTitle(op) {
   return `An error occurred during ${op}`
 }
 
-function getOpSuccessTitle(op) {
+function getOpSuccessTitle(op: any) {
   if (op === 'publish') {
     return `This document is now published.`
   }

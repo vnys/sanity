@@ -5,7 +5,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FormBuilder from 'part:@sanity/form-builder'
-import styles from '../Editor.css'
+
+import styles from './HistoryForm.css'
 
 const noop = () => null
 const noopPatchChannel = {onPatch: () => noop, receivePatches: noop}
@@ -35,7 +36,7 @@ export default class HistoryForm extends React.PureComponent {
     const {focusPath} = this.state
 
     return (
-      <form className={styles.editor} id="Sanity_Default_DeskTool_Editor_ScrollContainer">
+      <form className={styles.root} id="Sanity_Default_DeskTool_Editor_ScrollContainer">
         {document ? (
           <FormBuilder
             onBlur={noop}
