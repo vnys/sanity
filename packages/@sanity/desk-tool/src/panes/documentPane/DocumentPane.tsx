@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import React from 'react'
+import historyStore from 'part:@sanity/base/datastore/history'
+import schema from 'part:@sanity/base/schema'
+import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
 import {noop} from 'lodash'
+import React from 'react'
 import {from, Subscription} from 'rxjs'
 import {map} from 'rxjs/operators'
-import schema from 'part:@sanity/base/schema'
-import historyStore from 'part:@sanity/base/datastore/history'
-import {getPublishedId} from 'part:@sanity/base/util/draft-utils'
+import {CURRENT_REVISION_FLAG} from '../../constants'
+import {PaneRouterContext} from '../../contexts/PaneRouterContext'
 import isNarrowScreen from '../../utils/isNarrowScreen'
 import windowWidth$ from '../../utils/windowWidth'
-import {HistoryNavigator} from './historyNavigator'
-import {HistoryEventType} from './historyNavigator/__legacy'
-import {historyIsEnabled} from './history'
-import {getMenuItems, getProductionPreviewItem} from './documentPaneMenuItems'
-import {PaneRouterContext} from '../../contexts/PaneRouterContext'
-import {DocumentActionShortcuts} from './DocumentActionShortcuts'
 import {ChangesInspector} from './changesInspector'
-import {CURRENT_REVISION_FLAG} from '../../constants'
+import {DocumentActionShortcuts} from './DocumentActionShortcuts'
+import {getMenuItems, getProductionPreviewItem} from './documentPaneMenuItems'
 import {Editor} from './editor'
 import {ErrorPane} from '../errorPane'
 import {LoadingPane} from '../loadingPane'
+import {historyIsEnabled} from './history'
+import {HistoryNavigator} from './historyNavigator'
+import {HistoryEventType} from './historyNavigator/__legacy'
+import {getDocumentTimelineEvents$} from './store/history'
 
 import styles from './DocumentPane.css'
 
@@ -134,6 +135,7 @@ interface Props {
 }
 
 export default class DocumentPane extends React.PureComponent<Props, State> {
+  _documentHistoryEventsSubscription: Subscription | null = null
   _historyEventsSubscription?: Subscription
   _historyFetchDocSubscription?: Subscription
   resizeSubscriber?: Subscription
@@ -342,6 +344,12 @@ export default class DocumentPane extends React.PureComponent<Props, State> {
         this.setState({hasNarrowScreen})
       }
     })
+
+    const documentHistoryEvents$ = getDocumentTimelineEvents$(getPublishedId(this.props.options.id))
+
+    this._documentHistoryEventsSubscription = documentHistoryEvents$.subscribe(data => {
+      console.log(data)
+    })
   }
 
   componentWillUnmount() {
@@ -352,6 +360,11 @@ export default class DocumentPane extends React.PureComponent<Props, State> {
     }
 
     this.dispose()
+
+    if (this._documentHistoryEventsSubscription) {
+      this._documentHistoryEventsSubscription.unsubscribe()
+      this._documentHistoryEventsSubscription = null
+    }
   }
 
   isLiveEditEnabled() {
