@@ -26,8 +26,18 @@ export const useRouterState = (deps?: string[]) => {
     dependencies = deps.map(key => routerState[key])
   }
 
-  // subscribe() returns an unsubscribe function, so this'll handle unmounting
-  useEffect(() => router.channel.subscribe(() => setState(router.getState())), dependencies)
+  useEffect(() => {
+    let defer
+
+    const unsubscribe = router.channel.subscribe(() => {
+      defer = setTimeout(() => setState(router.getState()), 0)
+    })
+
+    return (): void => {
+      clearTimeout(defer)
+      unsubscribe()
+    }
+  }, dependencies)
 
   return routerState
 }
