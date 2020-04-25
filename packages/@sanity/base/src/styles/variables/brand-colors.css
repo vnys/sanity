@@ -1,9 +1,9 @@
 :root {
-  --brand-darkest: #000;
+  --brand-darkest: #121923;
   --brand-lightest: #fff;
-  --gray-base: #323232;
-  --brand-primary: #24a3e3;
+  --gray-base: #7b8ca8;
+  --brand-primary: #2276fc;
   --brand-primary--inverted: #fff;
-  --brand-secondary: #f43;
+  --brand-secondary: #f03e2f;
   --brand-secondary--inverted: #fff;
 }

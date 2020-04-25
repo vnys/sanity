@@ -1,17 +1,26 @@
+@import 'part:@sanity/base/theme/variables-style';
+
 .root {
-  background: #fff;
+  background: var(--component-bg);
   padding: 0.75rem;
   font-size: 14px;
   overflow: auto;
+  border-radius: var(--border-radius-base);
 }
 
 .fromValue {
-  background: #eee;
+  background: var(--pre-bg);
+  color: var(--pre-color);
   text-decoration: line-through;
   margin: 1em 0 0;
+  padding: var(--small-padding);
+  overflow: auto;
 }
 
 .toValue {
-  background: #eee;
+  background: var(--pre-bg);
+  color: var(--pre-color);
   margin: 1em 0 0;
+  padding: var(--small-padding);
+  overflow: auto;
 }

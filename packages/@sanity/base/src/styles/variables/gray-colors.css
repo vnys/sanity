@@ -1,7 +1,7 @@
 @import 'part:@sanity/base/theme/variables/brand-colors-style';
 
 :root {
-  --black: #000;
+  --black: #121923;
   --white: #fff;
   --gray-darkest: color(var(--gray-base) lightness(+ 5%));
   --gray-darkest--transparent: color(var(--gray-base) lightness(+ 5%) a(95%));

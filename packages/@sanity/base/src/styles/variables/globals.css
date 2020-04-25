@@ -1,14 +1,17 @@
 :root {
   /* Colors */
-  --body-bg: #f5f5f5;
+  --body-bg: #e4e8ed;
   --body-text: color(var(--body-bg) contrast(57%));
   --component-bg: #fff;
   --component-text-color: color(var(--component-bg) contrast(80%));
   --preview-placeholder-color: color(var(--component-bg) contrast(80%) alpha(10%));
   --component-border-color: color(var(--component-bg) contrast(80%) a(20%));
   --backdrop-color: color(var(--brand-darkest) a(12%));
-  --main-navigation-color: color(var(--brand-primary) shade(70%) saturation(20%));
-  --main-navigation-color--inverted: color(var(--main-navigation-color) contrast(80%));
+  --main-navigation-color: var(--brand-darkest);
+
+  /* --main-navigation-color: color(var(--brand-primary) shade(70%) saturation(20%)); */
+
+  --main-navigation-color--inverted: color(var(--brand-darkest) contrast(80%));
   --dialog-header-color: var(--component-bg);
   --dialog-header-color--inverted: var(--body-text);
   --header-height: 3rem;
@@ -58,8 +61,8 @@
   --block-editor-base-font-family: inherit;
   --block-editor-header-font-family: inherit;
   --block-extras-width: 10rem;
-  --block-extras-border-color: #ccc;
-  --block-extras-background-color: #eee;
+  --block-extras-border-color: #cad1dc;
+  --block-extras-background-color: #e4e8ed;
 
   /* Others */
   --pane-header-height: 3.4375rem; /* 55px */
