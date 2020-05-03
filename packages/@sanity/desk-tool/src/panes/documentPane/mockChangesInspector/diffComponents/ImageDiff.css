@@ -1,0 +1,17 @@
+.imageFrame {
+  /* this page intentionally left blank */
+}
+
+.imageFramePrev {
+  composes: imageFrame;
+  opacity: 0.5;
+}
+
+.imageFrame > img {
+  width: 100%;
+}
+
+.imageFramePrev:hover,
+.imageFramePrev:focus {
+  opacity: 1;
+}

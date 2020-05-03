@@ -30,11 +30,12 @@ function ArrayDiffItem({action}: any) {
 }
 
 function DefaultArrayDiff({diff}: any) {
+  console.log(diff)
   return (
     <FieldDiffContainer>
-      {diff.actions.map((action, idx) => {
+      {/* {diff.actions.map((action, idx) => {
         return <ArrayDiffItem action={action} key={String(idx)} />
-      })}
+      })} */}
     </FieldDiffContainer>
   )
 }

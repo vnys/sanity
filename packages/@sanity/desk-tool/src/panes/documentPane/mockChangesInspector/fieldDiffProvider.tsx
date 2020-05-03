@@ -9,7 +9,7 @@ const FieldDiffContext = React.createContext<any>({field: {type: 'undefined'}})
 
 export function FieldDiffProvider(props: Props) {
   return (
-    <FieldDiffContext.Provider value={{field: props.field}}>
+    <FieldDiffContext.Provider value={{field: props.field.type}}>
       {props.children}
     </FieldDiffContext.Provider>
   )

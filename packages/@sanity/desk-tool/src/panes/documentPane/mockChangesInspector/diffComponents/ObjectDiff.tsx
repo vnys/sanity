@@ -1,24 +1,38 @@
 import * as React from 'react'
+import {ObjectDiff as IObjectDiff, Diff} from '../../../../utils/diff'
 import FieldDiff from '../FieldDiff'
-
 import styles from './ObjectDiff.css'
 
-function ObjectDiff({diff, field}: any) {
+interface Props {
+  diff: IObjectDiff
+  field: any
+}
+
+function ObjectFieldDiff({diff, field}: {diff: Diff; field: any}) {
+  return (
+    <div className={styles.diffCard}>
+      <FieldDiff diff={diff} field={field} />
+    </div>
+  )
+}
+
+function ObjectDiff({diff, field}: Props) {
+  if (!diff.isChanged) {
+    return null
+  }
+
   return (
     <div className={styles.root}>
-      <h4 className={styles.title}>{field.title}</h4>
+      <h4 className={styles.title}>{field.type.title}</h4>
 
       <div className={styles.diffCardList}>
-        {field.fields.map((subField: any, idx: number) => {
-          const subDiff = diff.fields[subField.name]
+        {field.type.fields.map((subField: any, idx: number) => {
+          const subDiff = diff.children[subField.name]
+          if (!subDiff) {
+            return null
+          }
 
-          if (!subDiff) return null
-
-          return (
-            <div className={styles.diffCard} key={String(idx)}>
-              <FieldDiff diff={subDiff.diff} field={subField} />
-            </div>
-          )
+          return <ObjectFieldDiff diff={subDiff} field={subField} key={String(idx)} />
         })}
       </div>
     </div>

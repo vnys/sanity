@@ -4,6 +4,7 @@ import ColorDiff from './ColorDiff'
 import DateDiff from './DateDiff'
 import FileDiff from './FileDiff'
 import GeopointDiff from './GeopointDiff'
+import ImageDiff from './ImageDiff'
 import NumberDiff from './NumberDiff'
 import ObjectDiff from './ObjectDiff'
 import ReferenceDiff from './ReferenceDiff'
@@ -19,6 +20,7 @@ export default {
   email: StringDiff,
   file: FileDiff,
   geopoint: GeopointDiff,
+  image: ImageDiff,
   number: NumberDiff,
   object: ObjectDiff,
   reference: ReferenceDiff,

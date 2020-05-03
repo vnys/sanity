@@ -1,33 +1,30 @@
 import * as React from 'react'
+import {StringDiff as IStringDiff, StringDiffSegment} from '../../../../utils/diff'
 import FieldDiffContainer from '../components/FieldDiffContainer'
 
 import styles from './StringDiff.css'
 
-function Segment({segment}: any) {
-  if (segment.type === 'add') {
-    return (
-      <span className={styles.add} style={{color: 'blue'}}>
-        {segment.text}
-      </span>
-    )
+function StringSegment({segment}: {segment: StringDiffSegment}) {
+  if (segment.type === 'added') {
+    return <span className={styles.add}>{segment.text}</span>
   }
 
-  if (segment.type === 'remove') {
-    return (
-      <span className={styles.remove} style={{color: 'blue'}}>
-        {segment.text}
-      </span>
-    )
+  if (segment.type === 'removed') {
+    return <span className={styles.remove}>{segment.text}</span>
   }
 
   return <span>{segment.text}</span>
 }
 
-function StringDiff({diff}: any) {
+interface Props {
+  diff: IStringDiff
+}
+
+function StringDiff(props: Props) {
   return (
     <FieldDiffContainer>
-      {diff.segments.map((segment, idx) => (
-        <Segment key={String(idx)} segment={segment} />
+      {props.diff.segments.map((segment, idx) => (
+        <StringSegment key={String(idx)} segment={segment} />
       ))}
     </FieldDiffContainer>
   )

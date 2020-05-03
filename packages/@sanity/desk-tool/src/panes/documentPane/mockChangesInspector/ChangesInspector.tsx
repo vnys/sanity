@@ -1,31 +1,26 @@
 import * as React from 'react'
+import {diffObject} from '../../../utils/diff'
+import {Doc} from '../types'
 import FieldDiff from './FieldDiff'
 
 import styles from './ChangesInspector.css'
 
-// mock props:
-import {documentDiff} from './mockProps'
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Schema = any
 
-// mock schema:
-const mockSchema = {
-  type: 'document',
-  name: 'post',
-  fields: [
-    {type: 'string', name: 'title', title: 'Title'},
-    {type: 'array', name: 'authors', title: 'Authors'},
-    {type: 'boolean', name: 'isPublished', title: 'Is published'},
-    {type: 'color', name: 'color', title: 'Color'},
-    {type: 'date', name: 'publishedAt', title: 'Published at'},
-    {
-      type: 'object',
-      name: 'seo',
-      title: 'SEO',
-      fields: [{type: 'string', name: 'title', title: 'Title'}]
-    }
-  ]
+interface Props {
+  fromValue: Doc | null
+  isLoading: boolean
+  onHistoryClose: () => void
+  toValue: Doc | null
+  schemaType: Schema
 }
 
-function ChangesInspector(props: any) {
+function ChangesInspector(props: Props): React.ReactElement {
+  const {fromValue, toValue, schemaType} = props
+  const docDiff = React.useMemo(() => diffObject(fromValue, toValue, []), [fromValue, toValue])
+  const fieldDiffs = docDiff ? docDiff.children : {}
+
   return (
     <div className={styles.root}>
       <header className={styles.header}>
@@ -33,14 +28,15 @@ function ChangesInspector(props: any) {
       </header>
 
       <div className={styles.diffCardList}>
-        {mockSchema.fields.map(field => {
-          const diff = documentDiff.fields[field.name]
-
-          if (!diff) return null
+        {schemaType.fields.map(field => {
+          const diff = fieldDiffs[field.name]
+          if (!diff) {
+            return null
+          }
 
           return (
             <div className={styles.diffCard} key={field.name}>
-              <FieldDiff diff={diff.diff} field={field} />
+              <FieldDiff diff={diff} field={field} />
             </div>
           )
         })}

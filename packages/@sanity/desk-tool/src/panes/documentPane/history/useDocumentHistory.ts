@@ -160,8 +160,8 @@ export function useDocumentHistory({
 
     const prevRev = revRef.current
 
-    if (!rev || selectedHistoryEventIsLatest) {
-      debug('No revision ID to load')
+    if (!rev || rev === CURRENT_REVISION_FLAG) {
+      debug('No revision ID to load (%s)', rev)
 
       if (prevRev) {
         debug('Unload current loaded revision')
