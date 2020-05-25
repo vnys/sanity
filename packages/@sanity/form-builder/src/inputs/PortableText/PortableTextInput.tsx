@@ -559,6 +559,7 @@ export default withPatchSubscriber(
             onClose={handleClose}
             onFocus={this.handleEditObjectFormBuilderFocus}
             readOnly={this.props.readOnly}
+            presence={this.props.presence}
             referenceElement={referenceElement}
             type={type}
           />

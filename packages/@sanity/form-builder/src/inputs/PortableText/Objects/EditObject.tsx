@@ -7,7 +7,7 @@ import {FullscreenObjectEditing} from './renderers/FullscreenObjectEditing'
 import {PopoverObjectEditing} from './renderers/PopoverObjectEditing'
 
 import {ModalType} from '../../ArrayInput/typedefs'
-import {Marker} from '../../../typedefs'
+import {Marker, Presence} from '../../../typedefs'
 import {Path} from '../../../typedefs/path'
 import {PatchEvent} from '../../../PatchEvent'
 
@@ -20,6 +20,7 @@ type Props = {
   focusPath: Path
   formBuilderPath: Path
   editorPath: Path
+  presence: Presence[]
   onChange: (patchEvent: PatchEvent, editPath: Path) => void
   onClose: () => void
   onFocus: (arg0: Path) => void
@@ -36,6 +37,7 @@ export const EditObject: FunctionComponent<Props> = ({
   formBuilderPath,
   onChange,
   onFocus,
+  presence,
   onClose,
   onBlur
 }): JSX.Element => {
@@ -67,6 +69,7 @@ export const EditObject: FunctionComponent<Props> = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          presence={presence}
           onClose={handleClose}
         />
       )
@@ -84,6 +87,7 @@ export const EditObject: FunctionComponent<Props> = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          presence={presence}
           onClose={handleClose}
         />
       )
@@ -100,6 +104,7 @@ export const EditObject: FunctionComponent<Props> = ({
           onChange={handleChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          presence={presence}
           onClose={handleClose}
         />
       )
