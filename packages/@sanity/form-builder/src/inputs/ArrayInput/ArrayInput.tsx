@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import React from 'react'
+import FormField from 'part:@sanity/components/formfields/default'
 import ArrayFunctions from 'part:@sanity/form-builder/input/array/functions'
 import {map} from 'rxjs/operators'
 import {isPlainObject, get} from 'lodash'
@@ -8,17 +11,18 @@ import {Path} from '../../typedefs/path'
 import {Subscription} from '../../typedefs/observable'
 import {resolveTypeName} from '../../utils/resolveTypeName'
 import {FOCUS_TERMINATOR, startsWith} from '@sanity/util/paths'
-import UploadTargetFieldset from '../../utils/UploadTargetFieldset'
+// import UploadTargetFieldset from '../../utils/UploadTargetFieldset'
 import {insert, PatchEvent, set, setIfMissing, unset} from '../../PatchEvent'
-import styles from './styles/ArrayInput.css'
 import resolveListComponents from './resolveListComponents'
 import {ArrayType, ItemValue} from './typedefs'
 import RenderItemValue from './ItemValue'
 import randomKey from './randomKey'
 import Button from 'part:@sanity/components/buttons/default'
-import Fieldset from 'part:@sanity/components/fieldsets/default'
+// import Fieldset from 'part:@sanity/components/fieldsets/default'
 import Details from '../common/Details'
 import formBuilderConfig from 'config:@sanity/form-builder'
+
+import styles from './styles/ArrayInput.css'
 
 const NO_MARKERS: Marker[] = []
 const SUPPORT_DIRECT_UPLOADS = get(formBuilderConfig, 'images.directUploads')
@@ -29,13 +33,10 @@ function createProtoValue(type: Type): ItemValue {
       `Invalid item type: "${type.type}". Default array input can only contain objects (for now)`
     )
   }
+
   const key = randomKey(12)
-  return type.name === 'object'
-    ? {_key: key}
-    : {
-        _type: type.name,
-        _key: key
-      }
+
+  return type.name === 'object' ? {_key: key} : {_type: type.name, _key: key}
 }
 
 export type Props = {
@@ -48,82 +49,109 @@ export type Props = {
   onBlur: () => void
   focusPath: Path
   readOnly: boolean
+  // @todo: Fix typings
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   filterField: (field: any) => boolean
   resolveUploader?: (type: Type, file: File) => Uploader
   presence: any
 }
+
 type ArrayInputState = {
   isMoving: boolean
 }
-export default class ArrayInput extends React.Component<Props, ArrayInputState> {
-  _element: any
+
+export default class ArrayInput extends React.PureComponent<Props, ArrayInputState> {
+  _element: FormField | null
+
   uploadSubscriptions: {
     [name: string]: Subscription
   } = {}
+
   static defaultProps = {
     focusPath: []
   }
+
   state = {
     isMoving: false
   }
+
   insert = (itemValue: ItemValue, position: 'before' | 'after', atIndex: number) => {
     const {onChange} = this.props
+
     onChange(PatchEvent.from(setIfMissing([]), insert([itemValue], position, [atIndex])))
   }
+
   handlePrepend = (value: ItemValue) => {
     this.insert(value, 'before', 0)
     this.handleFocusItem(value)
   }
+
   handleAppend = (value: ItemValue) => {
     this.insert(value, 'after', -1)
     this.handleFocusItem(value)
   }
+
   handleRemoveItem = (item: ItemValue) => {
     this.removeItem(item)
   }
+
   handleFocus = () => {
     this.props.onFocus([FOCUS_TERMINATOR])
   }
+
   handleFocusItem = (item: ItemValue) => {
     this.props.onFocus([{_key: item._key}, FOCUS_TERMINATOR])
   }
 
   removeItem(item: ItemValue) {
     const {onChange, onFocus, value} = this.props
+
     onChange(PatchEvent.from(unset(item._key ? [{_key: item._key}] : [value.indexOf(item)])))
+
     if (item._key in this.uploadSubscriptions) {
       this.uploadSubscriptions[item._key].unsubscribe()
     }
+
     const idx = value.indexOf(item)
     const nextItem = value[idx + 1] || value[idx - 1]
+
     onFocus([nextItem ? {_key: nextItem._key} : FOCUS_TERMINATOR])
   }
 
   handleItemChange = (event: PatchEvent, item: ItemValue) => {
     const {onChange, value} = this.props
     const memberType = this.getMemberTypeOfItem(item)
+
     if (!memberType) {
       // eslint-disable-next-line no-console
       console.log('Could not find member type of item ', item)
       return
     }
+
     if (memberType.readOnly) {
       return
     }
+
     const key = item._key || randomKey(12)
+
     onChange(
       event.prefixAll({_key: key}).prepend(item._key ? [] : set(key, [value.indexOf(item), '_key']))
     )
   }
+
   handleSortStart = () => {
     this.setState({isMoving: true})
   }
+
   handleSortEnd = (event: {newIndex: number; oldIndex: number}) => {
     this.setState({isMoving: false})
+
     const {value, onChange} = this.props
     const item = value[event.oldIndex]
     const refItem = value[event.newIndex]
+
     // console.log('from %d => %d', event.oldIndex, event.newIndex, event)
+
     if (!item._key || !refItem._key) {
       // eslint-disable-next-line no-console
       console.error(
@@ -134,6 +162,7 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
     if (event.oldIndex === event.newIndex || item._key === refItem._key) {
       return
     }
+
     onChange(
       PatchEvent.from(
         unset([{_key: item._key}]),
@@ -145,6 +174,7 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
   getMemberTypeOfItem(item: ItemValue): Type {
     const {type} = this.props
     const itemTypeName = resolveTypeName(item)
+
     return type.of.find(memberType => memberType.name === itemTypeName)
   }
 
@@ -177,6 +207,7 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
         }
       : {}
     const listItemClassName = isMoving ? styles.listItemMute : styles.listItem
+
     return (
       <List className={readOnly ? styles.listReadOnly : styles.list} {...listProps}>
         {value.map((item, index) => {
@@ -215,14 +246,15 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
   }
 
   focus() {
-    if (this._element) {
-      this._element.focus()
-    }
+    // if (this._element) {
+    //   this._element.focus()
+    // }
   }
 
   setElement = el => {
     this._element = el
   }
+
   getUploadOptions = (file: File): Array<ResolvedUploader> => {
     const {type, resolveUploader} = this.props
     if (!resolveUploader) {
@@ -240,27 +272,37 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
       })
       .filter(Boolean)
   }
+
   handleFixMissingKeys = () => {
     const {onChange, value} = this.props
     const patches = value.map((val, i) => setIfMissing(randomKey(), [i, '_key']))
+
     onChange(PatchEvent.from(...patches))
   }
+
   handleRemoveNonObjectValues = () => {
     const {onChange, value} = this.props
     const nonObjects = value
       .reduce((acc, val, i) => (isPlainObject(val) ? acc : acc.concat(i)), [])
       .reverse()
     const patches = nonObjects.map(index => unset([index]))
+
     onChange(PatchEvent.from(...patches))
   }
+
   handleUpload = ({file, type, uploader}) => {
     const {onChange} = this.props
     const item = createProtoValue(type)
     const key = item._key
+
     this.insert(item, 'after', -1)
+
     const events$ = uploader
       .upload(file, type)
+      // @todo: Fix typings
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .pipe(map((uploadEvent: any) => PatchEvent.from(uploadEvent.patches).prefixAll({_key: key})))
+
     this.uploadSubscriptions = {
       ...this.uploadSubscriptions,
       [key]: events$.subscribe(onChange)
@@ -270,84 +312,96 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
   render() {
     const {type, level, markers, readOnly, onChange, value, presence} = this.props
     const hasNonObjectValues = (value || []).some(item => !isPlainObject(item))
+    const formFieldProps = {
+      label: type.title,
+      description: type.description,
+      level: level,
+      markers,
+      presence: presence.filter(item => item.path[0] === '$')
+    }
+
     if (hasNonObjectValues) {
       return (
-        <Fieldset
-          legend={type.title}
-          description={type.description}
-          level={level}
-          tabIndex={0}
-          onFocus={this.handleFocus}
-          ref={this.setElement}
-          markers={markers}
-        >
-          <div className={styles.nonObjectsWarning}>
-            Some items in this list are not objects. We need to remove them before the list can be
-            edited.
-            <div className={styles.removeNonObjectsButtonWrapper}>
-              <Button onClick={this.handleRemoveNonObjectValues}>Remove non-object values</Button>
+        <FormField {...formFieldProps} ref={this.setElement}>
+          <div className={styles.root}>
+            <div className={styles.nonObjectsWarning}>
+              Some items in this list are not objects. We need to remove them before the list can be
+              edited.
+              <div className={styles.removeNonObjectsButtonWrapper}>
+                <Button onClick={this.handleRemoveNonObjectValues}>Remove non-object values</Button>
+              </div>
+              <Details title={<b>Why is this happening?</b>}>
+                This usually happens when items are created through an API client from outside the
+                Content Studio and sets invalid data, or a custom input component have inserted
+                incorrect values into the list.
+              </Details>
             </div>
-            <Details title={<b>Why is this happening?</b>}>
-              This usually happens when items are created through an API client from outside the
-              Content Studio and sets invalid data, or a custom input component have inserted
-              incorrect values into the list.
-            </Details>
           </div>
-        </Fieldset>
+        </FormField>
       )
     }
+
     const hasMissingKeys = (value || []).some(item => !item._key)
+
     if (hasMissingKeys) {
       return (
-        <Fieldset
-          legend={type.title}
-          description={type.description}
-          level={level}
-          tabIndex={0}
-          onFocus={this.handleFocus}
-          ref={this.setElement}
-          markers={markers}
-        >
-          <div className={styles.missingKeysWarning}>
-            Some items in this list are missing their keys. We need to fix this before the list can
-            be edited.
-            <div className={styles.fixMissingKeysButtonWrapper}>
-              <Button onClick={this.handleFixMissingKeys}>Fix missing keys</Button>
+        <FormField {...formFieldProps} ref={this.setElement}>
+          <div className={styles.root}>
+            <div className={styles.missingKeysWarning}>
+              Some items in this list are missing their keys. We need to fix this before the list
+              can be edited.
+              <div className={styles.fixMissingKeysButtonWrapper}>
+                <Button onClick={this.handleFixMissingKeys}>Fix missing keys</Button>
+              </div>
+              <Details title={<b>Why is this happening?</b>}>
+                This usually happens when items are created through the API client from outside the
+                Content Studio and someone forgets to set the <code>_key</code>-property of list
+                items.
+                <p>
+                  The value of the <code>_key</code> can be any <b>string</b> as long as it is{' '}
+                  <b>unique</b> for each element within the array.
+                </p>
+              </Details>
             </div>
-            <Details title={<b>Why is this happening?</b>}>
-              This usually happens when items are created through the API client from outside the
-              Content Studio and someone forgets to set the <code>_key</code>-property of list
-              items.
-              <p>
-                The value of the <code>_key</code> can be any <b>string</b> as long as it is{' '}
-                <b>unique</b> for each element within the array.
-              </p>
-            </Details>
+
+            <div className={styles.listContainer}>{this.renderList()}</div>
           </div>
-          {this.renderList()}
-        </Fieldset>
+        </FormField>
       )
     }
-    const FieldSetComponent = SUPPORT_DIRECT_UPLOADS ? UploadTargetFieldset : Fieldset
+
+    // const FieldSetComponent = SUPPORT_DIRECT_UPLOADS ? UploadTargetFieldset : Fieldset
     const uploadProps = SUPPORT_DIRECT_UPLOADS
       ? {getUploadOptions: this.getUploadOptions, onUpload: this.handleUpload}
       : {}
+
+    console.log(uploadProps)
+
+    //   <FieldSetComponent
+    //   markers={markers}
+    //   tabIndex={0}
+    //   legend={type.title}
+    //   description={type.description}
+    //   level={level}
+    //   className={styles.root}
+    //   onFocus={this.handleFocus}
+    //   type={type}
+    //   ref={this.setElement}
+    //   presence={presence.filter(item => item.path[0] === '$')}
+    //   {...uploadProps}
+    // >
+    //   <div>
+    //     {value && value.length > 0 && this.renderList()}
+
     return (
-      <FieldSetComponent
-        markers={markers}
-        tabIndex={0}
-        legend={type.title}
-        description={type.description}
-        level={level}
-        className={styles.root}
-        onFocus={this.handleFocus}
-        type={type}
-        ref={this.setElement}
-        presence={presence.filter(item => item.path[0] === '$')}
-        {...uploadProps}
-      >
-        <div>
-          {value && value.length > 0 && this.renderList()}
+      // @todo: handle `ref`
+      // <div className={styles.root} ref={this.setElement}>
+      <FormField {...formFieldProps} ref={this.setElement}>
+        <div className={styles.root} onFocus={this.handleFocus}>
+          {value && value.length > 0 && (
+            <div className={styles.listContainer}>{this.renderList()}</div>
+          )}
+
           <ArrayFunctions
             type={type}
             value={value}
@@ -359,7 +413,36 @@ export default class ArrayInput extends React.Component<Props, ArrayInputState> 
             onChange={onChange}
           />
         </div>
-      </FieldSetComponent>
+      </FormField>
     )
+
+    // return (
+    //   <FieldSetComponent
+    //     markers={markers}
+    //     tabIndex={0}
+    //     legend={type.title}
+    //     description={type.description}
+    //     level={level}
+    //     className={styles.root}
+    //     onFocus={this.handleFocus}
+    //     type={type}
+    //     ref={this.setElement}
+    //     {...uploadProps}
+    //   >
+    //     <div>
+    //       {value && value.length > 0 && this.renderList()}
+    //       <ArrayFunctions
+    //         type={type}
+    //         value={value}
+    //         readOnly={readOnly}
+    //         onAppendItem={this.handleAppend}
+    //         onPrependItem={this.handlePrepend}
+    //         onFocusItem={this.handleFocusItem}
+    //         onCreateValue={createProtoValue}
+    //         onChange={onChange}
+    //       />
+    //     </div>
+    //   </FieldSetComponent>
+    // )
   }
 }

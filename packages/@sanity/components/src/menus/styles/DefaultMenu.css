@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  padding: var(--medium-padding);
+  padding: calc(var(--medium-padding) - var(--extra-small-padding)) var(--medium-padding);
   cursor: default;
   text-decoration: none;
   color: inherit;

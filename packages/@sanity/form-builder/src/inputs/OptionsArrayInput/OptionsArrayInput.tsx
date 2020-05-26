@@ -1,13 +1,15 @@
 import React from 'react'
 import {get} from 'lodash'
-import Fieldset from 'part:@sanity/components/fieldsets/default'
+import FormField from 'part:@sanity/components/formfields/default'
+// import Fieldset from 'part:@sanity/components/fieldsets/default'
 import PatchEvent, {set, unset} from '../../PatchEvent'
 import Item from './Item'
-import styles from './styles/OptionsArrayInput.css'
 import {resolveTypeName} from '../../utils/resolveTypeName'
 import {resolveValueWithLegacyOptionsSupport, isLegacyOptionsItem} from './legacyOptionsSupport'
 import {Type} from '../../typedefs'
 import {FOCUS_TERMINATOR} from '@sanity/util/paths'
+
+import styles from './styles/OptionsArrayInput.css'
 
 function isEqual(item, otherItem) {
   if (isLegacyOptionsItem(item) || isLegacyOptionsItem(otherItem)) {
@@ -84,19 +86,20 @@ export default class OptionsArrayInput extends React.PureComponent<OptionsArrayI
     const {type, markers, value, level, readOnly, presence} = this.props
     const options = get(type.options, 'list')
     const direction = get(type.options, 'direction') // vertical and horizontal
+
+    const formFieldProps = {
+      label: type.title,
+      description: type.description,
+      level: level,
+      markers,
+      presence
+    }
+
     return (
-      <Fieldset
-        legend={type.title}
-        description={type.description}
-        markers={markers}
-        presence={presence}
-        level={level}
-        onClick={this.handleFocus}
-      >
+      <FormField {...formFieldProps}>
         <div
-          className={
-            direction === 'vertical' ? styles.itemWrapperVertical : styles.itemWrapperHorizontal
-          }
+          className={direction === 'vertical' ? styles.stack : styles.inline}
+          onFocus={this.handleFocus}
         >
           {options.map((option, index) => {
             const optionType = this.getMemberTypeOfItem(option)
@@ -124,7 +127,7 @@ export default class OptionsArrayInput extends React.PureComponent<OptionsArrayI
             )
           })}
         </div>
-      </Fieldset>
+      </FormField>
     )
   }
 }

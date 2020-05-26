@@ -1,15 +1,29 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.root {
+  display: block;
+  box-shadow: inset 0 0 0 1px var(--hairline-color);
+  padding: var(--small-padding);
+
+  @media (--screen-medium) {
+    padding: var(--medium-padding);
+  }
+}
+
 .error {
   font-size: 0.8rem;
   padding: 1em;
   margin-bottom: 0.5rem;
 }
 
-.itemWrapperVertical {
+.stack {
+  composes: root;
   display: block;
   margin-bottom: 0.5rem;
 }
 
-.itemWrapperHorizontal {
+.inline {
+  composes: root;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   gap: 1em;

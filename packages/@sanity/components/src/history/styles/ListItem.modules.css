@@ -77,16 +77,20 @@
 
 .status {
   text-transform: uppercase;
-  font-size: var(--font-size-xsmall, 0.75rem);
-  letter-spacing: 0.5px;
+  font-size: var(--font-size-xsmall--uppercase);
+  letter-spacing: 0.25px;
+  font-weight: 500;
   line-height: 1;
+  margin-top: -1px;
+  margin-bottom: 2px;
 }
 
 .users {
   position: relative;
   display: inline-flex;
   align-items: center;
-  font-size: var(--font-size-large);
+  font-size: 21px;
+  /* font-size: var(--font-size-large); */
 }
 
 .userIcons {
@@ -99,13 +103,15 @@
 
 .userName {
   margin-left: var(--medium-padding);
-  font-size: var(--font-size-xsmall, 0.75rem);
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
 }
 
 .title {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
   font-weight: 600;
   margin-bottom: var(--small-padding);
-  margin-top: 1px;
 }
 
 .children {
@@ -116,7 +122,8 @@
   margin: var(--small-padding) 0 var(--medium-padding) 0;
 
   @nest & p {
-    font-size: var(--font-size-xsmall, 0.75rem);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
     margin: 0 0 var(--small-padding);
   }
 

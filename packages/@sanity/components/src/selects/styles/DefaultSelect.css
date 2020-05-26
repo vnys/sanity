@@ -7,14 +7,6 @@
   color: inherit;
 }
 
-.root:hover .arrow {
-  color: var(--input-border-color-focus);
-}
-
-.root:focus-within .arrow {
-  color: var(--input-border-color-focus);
-}
-
 .disabled {
   composes: root;
   opacity: 0.5;
@@ -103,30 +95,41 @@
   cursor: default;
   z-index: 1;
   pointer-events: none;
-  color: var(--input-color);
 
   @nest & > * {
     pointer-events: initial;
   }
 
-  @nest & .arrow {
-    pointer-events: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5em;
-    color: inherit;
-  }
-
   @nest & > *:not(:first-child) {
-    margin-left: 0.5em;
-  }
-
-  @nest & svg {
-    color: inherit;
+    margin-left: var(--small-padding);
   }
 
   @nest .selectContainerDisabled & {
-    opacity: 0.5;
+    color: var(--gray-lighter);
+  }
+}
+
+.arrow {
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5em;
+  color: inherit;
+  color: var(--gray);
+
+  @nest & svg {
+    font-size: 24px;
+    color: inherit;
+  }
+
+  @media (hover: hover) {
+    @nest .root:hover & {
+      color: var(--input-color);
+    }
+
+    @nest .root:focus-within & {
+      color: var(--input-color);
+    }
   }
 }
