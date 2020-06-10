@@ -106,32 +106,24 @@
 
 .header {
   position: relative;
-  height: var(--dialog-header-height);
-  min-height: var(--dialog-header-height);
-  line-height: var(--dialog-header-height);
   background-color: var(--dialog-header-color);
   color: var(--dialog-header-color--inverted);
   border-radius: var(--dialog-border-radius) var(--dialog-border-radius) 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: var(--medium-padding);
+  z-index: 10;
 
   @nest &::after {
     content: '';
-    width: 100%;
-    background: linear-gradient(
-      to top,
-      color(var(--shadow-base) a(0%)) 0%,
-      color(var(--shadow-base) a(4%)) 75%,
-      color(var(--shadow-base) a(12%)) 100%
-    );
-    height: 0.25em;
-    top: var(--dialog-header-height);
+    display: block;
     position: absolute;
     left: 0;
+    right: 0;
+    bottom: -1px;
+    border-bottom: 1px solid var(--hairline-color);
     pointer-events: none;
-    opacity: 0.5;
-    transition: opacity 0.2s linear;
   }
 
   @nest .danger & {
@@ -182,18 +174,15 @@
 }
 
 .title {
-  line-height: inherit;
-  padding: 0 var(--dialog-padding);
-  margin: 0;
-  font-size: 1.25em;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  @media (--screen-medium) {
-    margin-right: 2rem;
-  }
+  margin: -2px 0 -1px;
 }
 
 .closeButton {
@@ -264,37 +253,22 @@
 }
 
 .footer {
-  min-height: 4.5rem;
   box-sizing: border-box;
   padding: var(--medium-padding);
   background-color: var(--component-bg);
   border-radius: 0 0 var(--dialog-border-radius) var(--dialog-border-radius);
   display: flex;
   position: relative;
+  z-index: 10;
 
   @nest &::before {
     content: '';
-    width: 100%;
-    background: linear-gradient(
-      to bottom,
-      color(var(--shadow-base) a(0%)) 0%,
-      color(var(--shadow-base) a(2%)) 70%,
-      color(var(--shadow-base) a(7%)) 100%
-    );
-    height: 0.25em;
-    top: -0.25rem;
     position: absolute;
+    display: block;
     left: 0;
+    top: -1px;
+    right: 0;
+    border-top: 1px solid var(--hairline-color);
     pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.2s linear;
-  }
-}
-
-.footerWithShadow {
-  composes: footer;
-
-  @nest &::before {
-    opacity: 1;
   }
 }

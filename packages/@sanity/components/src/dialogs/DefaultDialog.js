@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
 import CloseIcon from 'part:@sanity/base/close-icon'
@@ -45,46 +45,6 @@ export default class DefaultDialog extends React.PureComponent {
     onClose() {},
     actions: [],
     color: 'default'
-  }
-
-  state = {
-    contentHasOverflow: false
-  }
-
-  componentDidMount() {
-    this.setFooterShadow()
-    window.addEventListener('resize', this.handleResize, {passive: true})
-    if (this.contentElement) {
-      this.contentElement.addEventListener('scroll', this.handleScroll, {passive: true})
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize, {passive: true})
-    if (this.contentElement) {
-      this.contentElement.removeEventListener('scroll', this.handleScroll, {passive: true})
-    }
-  }
-
-  handleResize = debounce(() => this.setFooterShadow())
-  handleScroll = debounce(() => this.setFooterShadowFromScroll(), 10)
-
-  componentDidUpdate() {
-    this.setFooterShadow()
-  }
-
-  setFooterShadowFromScroll = () => {
-    this.setFooterShadow()
-  }
-
-  setFooterShadow = () => {
-    if (this.contentElement) {
-      this.setState({
-        contentHasOverflow:
-          this.contentElement.scrollHeight >
-          this.contentElement.clientHeight + this.contentElement.scrollTop
-      })
-    }
   }
 
   openDialogElement() {
@@ -147,16 +107,17 @@ export default class DefaultDialog extends React.PureComponent {
       onClose,
       onClickOutside,
       onEscape,
-      className,
+      className: classNameProp,
       showCloseButton
     } = this.props
-    const {contentHasOverflow} = this.state
-    const classNames = `
-      ${styles.root}
-      ${styles[color]}
-      ${actions && actions.length > 0 ? styles.hasFunctions : ''}
-      ${className}
-    `
+
+    const className = classNames(
+      styles.root,
+      styles[color],
+      actions && actions.length > 0 && styles.hasFunctions,
+      classNameProp
+    )
+
     const handleEscape = onEscape || onClose || noop
 
     return (
@@ -166,7 +127,9 @@ export default class DefaultDialog extends React.PureComponent {
             <div className={classNames}>
               <div className={styles.overlay} />
               <div className={styles.dialog}>
-                <Escapable onEscape={event => (isActive || event.shiftKey) && handleEscape(event)} />
+                <Escapable
+                  onEscape={event => (isActive || event.shiftKey) && handleEscape(event)}
+                />
                 <CaptureOutsideClicks
                   onClickOutside={isActive ? onClickOutside : undefined}
                   className={styles.inner}
@@ -202,9 +165,7 @@ export default class DefaultDialog extends React.PureComponent {
                     {this.props.children}
                   </div>
                   {actions && actions.length > 0 && (
-                    <div className={contentHasOverflow ? styles.footerWithShadow : styles.footer}>
-                      {this.renderActions(actions)}
-                    </div>
+                    <div className={styles.footer}>{this.renderActions(actions)}</div>
                   )}
                 </CaptureOutsideClicks>
               </div>

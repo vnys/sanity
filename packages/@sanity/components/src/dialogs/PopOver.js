@@ -121,7 +121,9 @@ export default class PopOver extends React.PureComponent {
                           style={arrowProps.style}
                         />
                         <Escapable
-                          onEscape={event => (isActive || event.shiftKey) && onEscape && onEscape(event)}
+                          onEscape={event =>
+                            (isActive || event.shiftKey) && onEscape && onEscape(event)
+                          }
                         />
                         <CaptureOutsideClicks
                           onClickOutside={isActive ? onClickOutside : undefined}
@@ -150,7 +152,6 @@ export default class PopOver extends React.PureComponent {
                               <CloseIcon />
                             </button>
                           )}
-
                           <div
                             className={`
                             ${actions.length > 0 ? styles.contentWithActions : styles.content}

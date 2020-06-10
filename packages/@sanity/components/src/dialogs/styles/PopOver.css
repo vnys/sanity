@@ -253,9 +253,11 @@
 }
 
 .title {
-  font-size: 1.25em;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  /* font-size: 1.25em; */
   font-weight: 700;
-  margin: 0;
+  margin: -2px 0 -1px;
   padding: var(--small-padding) var(--medium-padding);
 
   @nest .responsive & {
