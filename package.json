@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap && npm run package-yarn",
-    "dev": "npm start",
+    "dev": "npm run design-studio",
     "rebuild": "gulp build",
     "build": "gulp clean && gulp build && npm run package",
     "clean": "gulp clean && lerna clean",
@@ -22,6 +22,7 @@
     "lint:fix": "eslint . --quiet --fix",
     "typecheck": "lerna run typecheck",
     "start": "npm run test-studio",
+    "design-studio": "gulp design-studio",
     "ecommerce-studio": "gulp ecommerce-studio",
     "test-studio": "gulp test-studio",
     "clean-studio": "gulp clean-studio",

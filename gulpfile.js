@@ -174,7 +174,8 @@ function studioTask(name, port) {
   ['blog-studio', '3336'],
   ['ecommerce-studio', '3337'],
   ['clean-studio', '3338'],
-  ['storybook', '9002']
+  ['storybook', '9002'],
+  ['design-studio', '4000']
 ].forEach(([name, port]) => {
   exports[name] = studioTask(name, port)
 })
