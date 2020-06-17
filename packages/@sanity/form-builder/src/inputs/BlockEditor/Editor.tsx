@@ -67,7 +67,8 @@ type OnPasteResult =
           insert?: FormBuilderValue[]
           path?: []
         }
-      | Error)
+      | Error
+    )
   | null
 type OnPasteResultOrPromise = (OnPasteResult | Promise<OnPasteResult>) | null
 type OnPasteFn = (arg0: {
@@ -293,8 +294,12 @@ export default class Editor extends React.Component<Props, {}> {
           throw result
         }
         if (result && result.insert) {
-          const allowedDecorators = this.props.blockContentFeatures.decorators.map(item => item.value)
-          const blocksToInsertNormalized = result.insert.map(block => normalizeBlock(block, {allowedDecorators}))
+          const allowedDecorators = this.props.blockContentFeatures.decorators.map(
+            item => item.value
+          )
+          const blocksToInsertNormalized = result.insert.map(block =>
+            normalizeBlock(block, {allowedDecorators})
+          )
           const patches = [
             setIfMissing(blocksToInsertNormalized),
             this.props.value && this.props.value.length !== 0
@@ -340,7 +345,7 @@ export default class Editor extends React.Component<Props, {}> {
     const isFullscreenKey = isKeyHotkey('mod+enter')
     const isEsc = isKeyHotkey('esc')
     const {onToggleFullScreen, fullscreen} = this.props
-    if (isFullscreenKey(event) || (isEsc(event) && fullscreen)) {
+    if (isFullscreenKey(event as any) || (isEsc(event as any) && fullscreen)) {
       event.preventDefault()
       event.stopPropagation()
       onToggleFullScreen(event)

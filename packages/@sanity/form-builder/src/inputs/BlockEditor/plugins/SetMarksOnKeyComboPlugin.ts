@@ -26,13 +26,13 @@ export default function SetMarksOnKeyComboPlugin(options: Options = {}) {
   return {
     onKeyDown(event: React.KeyboardEvent<any>, editor: SlateEditor, next: (arg0: void) => void) {
       let mark
-      if (isStrongHotkey(event)) {
+      if (isStrongHotkey(event as any)) {
         mark = 'strong'
-      } else if (isEmphasisHotkey(event)) {
+      } else if (isEmphasisHotkey(event as any)) {
         mark = 'em'
-      } else if (isUnderlinedHotkey(event)) {
+      } else if (isUnderlinedHotkey(event as any)) {
         mark = 'underline'
-      } else if (isCodeHotKey(event)) {
+      } else if (isCodeHotKey(event as any)) {
         mark = 'code'
       } else {
         return next()
