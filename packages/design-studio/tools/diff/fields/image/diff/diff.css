@@ -1,0 +1,21 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.root {
+  background: var(--component-bg);
+  border-radius: var(--border-radius-medium);
+  padding: calc(var(--medium-padding) - var(--extra-small-padding));
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1fr 1em 1fr;
+  grid-gap: var(--small-padding);
+
+  @nest & > div:first-child {
+    background: #fdebea;
+  }
+
+  @nest & > div:last-child {
+    background: #e7f9ed;
+  }
+}

@@ -1,0 +1,12 @@
+.root {
+  display: flex;
+  /* height: 200px; */
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  @nest & > img {
+    width: 100%;
+    height: auto;
+  }
+}

@@ -1,0 +1,25 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.root {
+  border-left: 1px solid var(--hairline-color);
+  padding-left: 11px;
+  display: grid;
+  grid-gap: 1.5em;
+}
+
+.field {
+}
+
+.label {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 600;
+  padding: var(--extra-small-padding) 0;
+  margin-bottom: var(--small-padding);
+}
+
+.card {
+  background: var(--component-bg);
+  border-radius: var(--border-radius-medium);
+  padding: calc(var(--medium-padding) - var(--extra-small-padding));
+}

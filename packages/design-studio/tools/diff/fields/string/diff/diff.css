@@ -4,18 +4,10 @@
   background: var(--component-bg);
   border-radius: var(--border-radius-medium);
   padding: calc(var(--medium-padding) - var(--extra-small-padding));
-}
 
-.inner {
-  display: grid;
-  grid-template-columns: 1fr 1em 1fr;
-  grid-gap: var(--small-padding);
-
-  @nest & > div:first-child {
-    background: #fcc;
-  }
-
-  @nest & > div:last-child {
-    background: #cfc;
+  @nest & > div {
+    font-size: 16px;
+    line-height: 20px;
+    margin: -2px 0 -1px;
   }
 }

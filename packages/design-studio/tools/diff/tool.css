@@ -1,14 +1,17 @@
 @import 'part:@sanity/base/theme/variables-style';
 
-:root {
-  /* @todo: remove these */
-  --line-height-small: 16px;
-}
-
 .root {
   min-height: 100%;
   padding: var(--medium-padding);
   box-sizing: border-box;
+  padding-top: 25vh;
+  padding-bottom: 90vh;
+}
+
+.heading {
+  font-size: 18px;
+  line-height: 24px;
+  margin: 0 0 1em;
 }
 
 /* .root {
@@ -21,8 +24,8 @@
 } */
 
 .label {
-  font-size: var(--font-size-small);
-  line-height: var(--line-height-small);
+  font-size: 13px;
+  line-height: 16px;
   font-weight: 600;
   padding: var(--extra-small-padding) 0;
   margin-bottom: var(--small-padding);
@@ -31,4 +34,9 @@
 .container {
   max-width: 540px;
   margin: 0 auto;
+}
+
+.fieldList {
+  display: grid;
+  grid-gap: 1.5em;
 }

@@ -18,6 +18,12 @@ export default {
       }
     },
     {
+      type: 'array',
+      name: 'keywords',
+      title: 'Keywords',
+      of: [{type: 'string'}]
+    },
+    {
       name: 'author',
       title: 'Author',
       type: 'reference',

@@ -1,26 +1,25 @@
 import React from 'react'
-import {ImageDiff} from '../../image'
-import {PTDiffBlock} from './block'
-import mockProps from './mockProps'
+import {ImageFieldDiff} from '../../image'
+import {PortableTextDiffBlock} from './block'
 
 import styles from './diff.css'
 
-export function PTDiff() {
-  const {nodes} = mockProps
+export function PortableTextFieldDiff(props: any) {
+  const {nodes} = props.node
 
   return (
     <div className={styles.root}>
       {nodes.map(node => {
-        if (node.fromValue._type === 'block') {
+        if (node.type === 'block') {
           return (
             <div className={styles.card} key={node.fromValue._key}>
-              <PTDiffBlock node={node} />
+              <PortableTextDiffBlock node={node} />
             </div>
           )
         }
 
-        if (node.fromValue._type === 'image') {
-          return <ImageDiff key={node.fromValue._key} node={node} />
+        if (node.type === 'image') {
+          return <ImageFieldDiff key={node.fromValue._key} node={node} />
         }
 
         return (

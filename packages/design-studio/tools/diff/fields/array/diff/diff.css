@@ -1,0 +1,59 @@
+@import 'part:@sanity/base/theme/variables-style';
+
+.root {
+  display: grid;
+  grid-gap: 0.5em;
+}
+
+.diffNode {
+  display: flex;
+  align-items: center;
+}
+
+.diffNodePath {
+  width: calc(1em - 5px);
+  height: calc(1em - 5px);
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+  background-color: #b89b23;
+  color: #fff;
+  border-radius: 50%;
+
+  @nest & > span {
+    display: flex;
+    justify-content: center;
+    margin: -5px 0 0;
+    padding-top: 1px;
+  }
+
+  @nest .inserted & {
+    background-color: #3ab667;
+  }
+}
+
+.diffNodeValueContainer {
+  flex: 1;
+  min-width: 0;
+  margin-left: 0.5em;
+}
+
+.diffNodeValue {
+  background: var(--component-bg);
+  border-radius: var(--border-radius-medium);
+  padding: calc(var(--medium-padding) - var(--extra-small-padding));
+}
+
+.stringNodeValue {
+  composes: diffNodeValue;
+
+  @nest & > div {
+    margin: -2px 0 -1px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+}

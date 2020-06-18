@@ -1,0 +1,14 @@
+.root {
+  @nest & ins {
+    color: #329659;
+    background: #e7f9ed;
+    text-decoration: none;
+    border-radius: 2px;
+  }
+
+  @nest & del {
+    color: #c3362c;
+    background: #fdebea;
+    border-radius: 2px;
+  }
+}

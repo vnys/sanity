@@ -1,36 +1,74 @@
 import React from 'react'
-import {ImageDiff, PTDiff} from './components'
+import {
+  ArrayFieldDiff,
+  ImageFieldDiff,
+  ObjectFieldDiff,
+  PortableTextFieldDiff,
+  StringFieldDiff
+} from './fields'
+import mockProps from './mockProps'
+import mockSchema from './mockSchema'
+import {SchemaProvider} from './schema'
 
 import styles from './tool.css'
 
+function FieldDiff({field, node}: {field: any; node: any}) {
+  if (node.type === 'array') {
+    const isPortableText = field.of.filter(n => n.type === 'block').length > 0
+
+    if (isPortableText) {
+      return <PortableTextFieldDiff node={node} />
+    }
+
+    return <ArrayFieldDiff node={node} />
+  }
+
+  if (node.type === 'image') {
+    return <ImageFieldDiff node={node} />
+  }
+
+  if (node.type === 'object') {
+    return <ObjectFieldDiff node={node} />
+  }
+
+  if (node.type === 'string') {
+    return <StringFieldDiff node={node} />
+  }
+
+  return <div>{node.type}</div>
+}
+
 export function DiffTool() {
+  const {fields, nodes} = mockProps
+
   return (
-    <div className={styles.root}>
-      <div className={styles.container}>
-        <h1>Diffs</h1>
+    <SchemaProvider schema={mockSchema}>
+      <div className={styles.root}>
+        <div className={styles.container}>
+          <h1 className={styles.heading}>{nodes.length} changed fields</h1>
 
-        <div style={{display: 'grid', gridGap: '1.5em'}}>
-          <div>
-            <div className={styles.label}>Portable text</div>
-            <PTDiff />
-          </div>
+          <div className={styles.fieldList}>
+            {nodes.map(node => {
+              const field = fields.find(f => f.name === node.key)
 
-          <div>
-            <div className={styles.label}>Array</div>
-            <PTDiff />
-          </div>
+              if (!field) {
+                return (
+                  <div>
+                    Field not found: <code>{node.key}</code>
+                  </div>
+                )
+              }
 
-          <div>
-            <div className={styles.label}>Object</div>
-            <PTDiff />
-          </div>
-
-          <div>
-            <div className={styles.label}>Image</div>
-            <ImageDiff node={{fromValue: {}, toValue: {}}} />
+              return (
+                <div key={node.key}>
+                  <div className={styles.label}>{field.title}</div>
+                  <FieldDiff field={field} node={node} />
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
-    </div>
+    </SchemaProvider>
   )
 }

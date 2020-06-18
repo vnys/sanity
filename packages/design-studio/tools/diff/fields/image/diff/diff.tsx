@@ -3,7 +3,7 @@ import {SanityImage} from './sanityImage'
 
 import styles from './diff.css'
 
-export function ImageDiff(props: {node: any}) {
+export function ImageFieldDiff(props: {node: any}) {
   const {node} = props
 
   return (
