@@ -1,7 +1,34 @@
 @import 'part:@sanity/base/theme/variables-style';
 
+:root {
+  /* @todo: remove these */
+  --line-height-small: 16px;
+}
+
 .root {
   min-height: 100%;
   padding: var(--medium-padding);
   box-sizing: border-box;
+}
+
+/* .root {
+  @nest & > pre {
+    font-family: var(--font-family-monospace);
+    background: var(--gray-lighter);
+    padding: calc(var(--medium-padding) - var(--extra-small-padding));
+    margin: 0;
+  }
+} */
+
+.label {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+  font-weight: 600;
+  padding: var(--extra-small-padding) 0;
+  margin-bottom: var(--small-padding);
+}
+
+.container {
+  max-width: 540px;
+  margin: 0 auto;
 }
