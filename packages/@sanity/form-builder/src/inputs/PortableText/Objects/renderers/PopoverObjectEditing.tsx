@@ -3,6 +3,7 @@ import React, {FunctionComponent} from 'react'
 
 import Popover from 'part:@sanity/components/dialogs/popover'
 import Stacked from 'part:@sanity/components/utilities/stacked'
+import DialogContent from 'part:@sanity/components/dialogs/content'
 
 import {FormBuilderInput} from '../../../../FormBuilderInput'
 import {PortableTextBlock, PortableTextChild, Type} from '@sanity/portable-text-editor'
@@ -52,6 +53,7 @@ export const PopoverObjectEditing: FunctionComponent<Props> = ({
           onClose={onClose}
           title={type.title}
         >
+          <DialogContent size="medium" padding="none">
           <PresenceOverlay>
             <FormBuilderInput
               type={type}
@@ -67,6 +69,7 @@ export const PopoverObjectEditing: FunctionComponent<Props> = ({
               markers={markers}
             />
           </PresenceOverlay>
+          </DialogContent>
         </Popover>
       )}
     </Stacked>
