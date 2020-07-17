@@ -6,14 +6,14 @@ import richDateType from 'part:@sanity/form-builder/input/rich-date/schema'
 import book from './book'
 import author from './author'
 import blocks from './blocks'
-import references from './references'
+import references, {authorReference} from './references'
 import images, {myImage} from './images'
 import strings from './strings'
 import texts from './texts'
 import objects, {myObject} from './objects'
 import recursiveObjectTest, {recursiveObject} from './recursiveObject'
 import arrays, {topLevelArrayType, topLevelPrimitiveArrayType} from './arrays'
-import files from './files'
+import files, {namedFile} from './files'
 import uploads from './uploads'
 import code from './code'
 import customNumber from './customNumber'
@@ -25,7 +25,7 @@ import recursiveArray from './recursiveArray'
 import recursivePopover from './recursivePopover'
 import numbers from './numbers'
 import booleans from './booleans'
-import datetime from './datetime'
+import datetime, {customDateTime} from './datetime'
 import richDateTest from './richDate'
 import slugs from './slugs'
 import spotifyEmbed from './spotifyEmbed'
@@ -51,6 +51,7 @@ import button from './button'
 import richTextObject from './richTextObject'
 import mux from './mux'
 import review from './review'
+import diffTest from './diffTest'
 
 export default createSchema({
   name: 'test-examples',
@@ -69,8 +70,10 @@ export default createSchema({
     objects,
     fieldsets,
     datetime,
+    customDateTime,
     date,
     richDateTest,
+    diffTest,
     validation,
     actions,
     topLevelArrayType,
@@ -82,7 +85,9 @@ export default createSchema({
     liveEdit,
     images,
     files,
+    namedFile,
     experiment,
+    authorReference,
     references,
     geopoint,
     blocks,

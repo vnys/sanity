@@ -1,5 +1,14 @@
 import icon from 'react-icons/lib/fa/calendar'
 
+export const customDateTime = {
+  name: 'customDateTime',
+  type: 'datetime',
+  title: 'Custom date time format',
+  options: {
+    dateFormat: 'Do. MMMM YYYY'
+  }
+}
+
 export default {
   name: 'datetimeTest',
   type: 'document',

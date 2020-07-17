@@ -1,5 +1,12 @@
 import icon from 'react-icons/lib/fa/recycle'
 
+export const authorReference = {
+  name: 'authorReference',
+  title: 'Author reference',
+  type: 'reference',
+  to: [{type: 'author'}]
+}
+
 export default {
   name: 'referenceTest',
   type: 'document',

@@ -1,0 +1,20 @@
+.nav {
+  margin: 10px;
+  padding: 0;
+}
+
+.link {
+  list-style-type: none;
+  margin: 0;
+  display: inline-block;
+}
+
+.link a {
+  white-space: nowrap;
+  display: block;
+  padding: 10px;
+}
+
+.link a:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}

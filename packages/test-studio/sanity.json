@@ -54,6 +54,10 @@
     },
     {
       "implements": "part:@sanity/base/tool",
+      "path": "src/diff-tool"
+    },
+    {
+      "implements": "part:@sanity/base/tool",
       "path": "src/test-intent-tool"
     },
     {

@@ -1,5 +1,19 @@
 import icon from 'react-icons/lib/fa/file-o'
 
+export const namedFile = {
+  name: 'namedFile',
+  title: 'File with filename',
+  type: 'file',
+  fields: [
+    {
+      title: 'Filename',
+      name: 'filename',
+      type: 'string',
+      options: {isHighlighted: true}
+    }
+  ]
+}
+
 export default {
   name: 'filesTest',
   type: 'document',
