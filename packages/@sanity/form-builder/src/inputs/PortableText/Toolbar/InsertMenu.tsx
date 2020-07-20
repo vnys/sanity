@@ -42,6 +42,9 @@ export default function InsertMenu(props: Props) {
         html={
           <div className={styles.menu}>
             {items.map(item => {
+              if (item.type.hidden) {
+                return null
+              }
               const itemIsDisabled = item.disabled
               const title = item.type.title || item.type.type.name
               return (
