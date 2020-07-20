@@ -11,7 +11,9 @@ const OVERRIDABLE_FIELDS = [
   'description',
   'options',
   'fieldsets',
-  'validation'
+  'validation',
+  'hidden',
+  'readOnly'
 ]
 
 const IMAGE_CORE = {
