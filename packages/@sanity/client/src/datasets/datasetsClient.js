@@ -22,6 +22,12 @@ assign(DatasetsClient.prototype, {
     return this.request({uri: '/datasets'})
   },
 
+  copy(name, targetDataset) {
+    validate.dataset(name)
+    validate.dataset(targetDataset)
+    return this.request({method: 'PUT', uri: `/datasets/${name}/copy`, body: {targetDataset}})
+  },
+
   _modify(method, name, body) {
     validate.dataset(name)
     return this.request({method, uri: `/datasets/${name}`, body})
