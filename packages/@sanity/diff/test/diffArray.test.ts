@@ -1,4 +1,5 @@
 import {diffArray} from '../src/calculate/diffArray'
+import {ChangeOperation, ObjectDiff, ArrayDiff} from '../src'
 
 describe('diffArray', () => {
   describe('primitive/mixed values', () => {
@@ -653,6 +654,115 @@ describe('diffArray', () => {
           toValue: {value: 'new value'}
         }
       })
+    })
+  })
+
+  describe.only('portable text', () => {
+    test.skip('breakdown', () => {
+      const diff = diffArray(
+        [
+          {
+            _type: 'span',
+            _key: '49094ba1ee010',
+            text: 'From this value',
+            marks: []
+          }
+        ],
+        [
+          {
+            _type: 'span',
+            _key: '49094ba1ee010',
+            text: 'To ',
+            marks: []
+          },
+          {
+            _type: 'span',
+            _key: '49094ba1ee011',
+            text: 'that',
+            marks: ['em']
+          },
+          {
+            _type: 'span',
+            _key: '49094ba1ee012',
+            text: ' value',
+            marks: []
+          }
+        ]
+      )
+    })
+
+    test('change + mark', () => {
+      const diff = diffArray(
+        [
+          {
+            _type: 'block',
+            _key: '49094ba1ee01',
+            style: 'normal',
+            markDefs: [],
+            children: [
+              {
+                _type: 'span',
+                _key: '49094ba1ee010',
+                text: 'From this value',
+                marks: []
+              }
+            ]
+          }
+        ],
+        [
+          {
+            _type: 'block',
+            _key: '49094ba1ee01',
+            style: 'normal',
+            markDefs: [],
+            children: [
+              {
+                _type: 'span',
+                _key: '49094ba1ee010',
+                text: 'To ',
+                marks: []
+              },
+              {
+                _type: 'span',
+                _key: '49094ba1ee011',
+                text: 'that',
+                marks: ['em']
+              },
+              {
+                _type: 'span',
+                _key: '49094ba1ee012',
+                text: ' value',
+                marks: []
+              }
+            ]
+          }
+        ]
+      )
+
+      expect(diff.isChanged).toBe(true)
+
+      // Array item at 0 was changed because the block contents changed
+      expect(diff.changes).toHaveLength(1)
+      expect(diff.changes[0]).toHaveProperty('op', 'change')
+
+      // Block has changed, because children changed
+      const blockDiff = (diff.changes[0] as ChangeOperation).diff as ObjectDiff
+      expect(blockDiff.isChanged).toBe(true)
+
+      // The only thing that changed within the block was the children
+      expect(blockDiff.fields).toHaveProperty('children')
+      expect(Object.keys(blockDiff.fields)).toHaveLength(1)
+
+      // Children should have three changes:
+      // 1. Span 0 changed text: `From ...` => `To `
+      // 2. New span was added (`that`), with mark (`em`)
+      // 3. New span was added (` value`)
+      const childrenDiff = blockDiff.fields.children as ArrayDiff
+      expect(childrenDiff.isChanged).toBe(true)
+      expect(childrenDiff.changes).toHaveLength(3)
+
+      // Span 0 change is a bit funky
+      expect(childrenDiff.changes[0]).toHaveProperty('op', 'change')
     })
   })
 })
