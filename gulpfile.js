@@ -127,8 +127,11 @@ const TS_PROJECTS = BUILD_SERIALLY.concat(
   )
 )
 
-const serialTsProjects = TS_PROJECTS.filter(projectPath => Array.isArray(projectPath)).flat()
 const parallelTsProjects = TS_PROJECTS.filter(projectPath => !Array.isArray(projectPath))
+const serialTsProjects = TS_PROJECTS.filter(projectPath => Array.isArray(projectPath)).reduce(
+  (acc, curr) => acc.concat(curr),
+  []
+)
 
 const buildTS = series(
   series(serialTsProjects.map(buildTypeScript)),
