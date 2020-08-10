@@ -1,11 +1,11 @@
 import {ArrayDiff} from '@sanity/diff'
 import React from 'react'
-import {ArrayItemMetadata} from '../../panes/documentPane/changesPanel/types'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {ArrayItemChangeNode} from '../../../changesPanel/types'
+import {Annotation} from '../../../history/types'
 
 export interface PTDiffProps {
   diff: ArrayDiff<Annotation>
-  items?: ArrayItemMetadata[]
+  items?: ArrayItemChangeNode[]
   schemaType: {name: string}
 }
 

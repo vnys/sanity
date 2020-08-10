@@ -2,7 +2,7 @@ import React from 'react'
 import {useUser, LOADING_USER} from '@sanity/react-hooks'
 import {Tooltip} from 'react-tippy'
 import {UserAvatar} from '@sanity/components/presence'
-import {Annotation, AnnotationChanged} from '../../panes/documentPane/history/types'
+import {Annotation, AnnotationChanged} from '../../../history/types'
 
 import styles from './annotationTooltip.css'
 

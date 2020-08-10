@@ -2,46 +2,26 @@ import * as React from 'react'
 import {useUserColorManager} from '@sanity/base'
 import {ObjectDiff, FieldDiff, StringSegmentChanged, StringDiff} from '@sanity/diff'
 import Preview from 'part:@sanity/base/preview?'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {Annotation} from '../../../history/types'
 import {AnnotationTooltip} from '../annotationTooltip'
 import {getAnnotationColor} from '../helpers'
 import {DiffComponent} from '../types'
 
-import styles from './ImageFieldDiff.css'
+import styles from './ReferenceFieldDiff.css'
 
-interface Image {
-  asset?: {
-    _ref: string
-  }
-  hotspot: {
-    height: number
-    width: number
-    x: number
-    y: number
-  }
-  crop: {
-    bottom: number
-    left: number
-    right: number
-    top: number
-  }
+interface Reference {
+  _ref?: string
 }
 
-/**
- * Todo:
- * - Indicate hotspot/crop changes
- * - Show diffs for metadata fields
- */
-
-export const ImageFieldDiff: DiffComponent<ObjectDiff<Annotation, Image>> = ({
+export const ReferenceFieldDiff: DiffComponent<ObjectDiff<Annotation, Reference>> = ({
   diff,
   schemaType
 }) => {
   const userColorManager = useUserColorManager()
   const {fromValue, toValue} = diff
-  const prev = fromValue?.asset?._ref
-  const next = toValue?.asset?._ref
-  const annotation = getRefFieldAnnotation(diff)
+  const prev = fromValue && fromValue._ref
+  const next = toValue && toValue._ref
+  const annotation = getAnnotation(diff)
 
   let color = {bg: '#fcc', fg: '#f00'}
   if (annotation) {
@@ -52,13 +32,13 @@ export const ImageFieldDiff: DiffComponent<ObjectDiff<Annotation, Image>> = ({
     <div className={styles.root} style={{background: color.bg, color: color.fg}}>
       {prev && (
         <div className={styles.removed}>
-          <Preview type={schemaType} value={fromValue} layout="card" />
+          <Preview type={schemaType} value={fromValue} layout="default" />
         </div>
       )}
 
       {prev && <div>⇩</div>}
 
-      {next && <Preview type={schemaType} value={toValue} layout="card" />}
+      {next && <Preview type={schemaType} value={toValue} layout="default" />}
     </div>
   )
 
@@ -67,6 +47,20 @@ export const ImageFieldDiff: DiffComponent<ObjectDiff<Annotation, Image>> = ({
   ) : (
     content
   )
+}
+
+function getAnnotation(diff: ObjectDiff<Annotation, Reference>): Annotation | null {
+  const refChange = diff.fields._ref
+  if (refChange && refChange.isChanged) {
+    return getStringFieldAnnotation(refChange)
+  }
+
+  // Fall back to other fields if _ref field was not changed (eg, weak was changed)
+  const modified = Object.keys(diff.fields).find(
+    fieldName => diff.fields[fieldName].type !== 'unchanged'
+  )
+
+  return modified ? getStringFieldAnnotation(diff.fields[modified]) : null
 }
 
 function getStringFieldAnnotation(field: FieldDiff<Annotation>): Annotation | null {
@@ -86,22 +80,4 @@ function getStringFieldAnnotation(field: FieldDiff<Annotation>): Annotation | nu
 
   // Unchanged
   return null
-}
-
-function getRefFieldAnnotation(diff: ObjectDiff<Annotation>): Annotation | null {
-  const assetFieldDiff = diff.fields.asset
-  if (!assetFieldDiff || assetFieldDiff.type === 'unchanged') {
-    return null
-  }
-
-  if (assetFieldDiff.type === 'added' || assetFieldDiff.type === 'removed') {
-    return assetFieldDiff.annotation
-  }
-
-  if (assetFieldDiff.diff.type !== 'object') {
-    return null
-  }
-
-  const refField = assetFieldDiff.diff.fields._ref
-  return refField ? getStringFieldAnnotation(refField) : null
 }

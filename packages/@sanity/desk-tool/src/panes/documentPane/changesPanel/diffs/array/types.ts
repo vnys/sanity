@@ -1,6 +1,6 @@
 import {ArrayDiff} from '@sanity/diff'
-import {ArrayItemChangeNode} from '../../panes/documentPane/changesPanel/types'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {ArrayItemChangeNode} from '../../../changesPanel/types'
+import {Annotation} from '../../../history/types'
 
 export interface ArrayDiffProps {
   diff: ArrayDiff<Annotation>

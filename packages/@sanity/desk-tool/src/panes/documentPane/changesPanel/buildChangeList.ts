@@ -1,8 +1,8 @@
 import {toString as pathToString} from '@sanity/util/paths'
 import {ObjectDiff, Path} from '@sanity/diff'
-import {resolveDiffComponent} from '../../../diffs/resolveDiffComponent'
 import {Annotation} from '../history/types'
 import {SchemaType} from '../types'
+import {resolveDiffComponent} from './diffs/resolveDiffComponent'
 import {getArrayItemDiffType, getDiffAtPath} from './helpers'
 import {ChangeNode} from './types'
 

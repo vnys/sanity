@@ -1,7 +1,7 @@
 import {ObjectDiff} from '@sanity/diff'
 import React from 'react'
-import {Annotation} from '../../panes/documentPane/history/types'
-import {ObjectField} from '../../panes/documentPane/types'
+import {Annotation} from '../../../history/types'
+import {ObjectField} from '../../../types'
 import {DiffComponent} from '../types'
 import {buildChangeList} from './buildChangeList'
 

@@ -3,7 +3,7 @@
 import {toString as pathToString} from '@sanity/util/paths'
 import {ObjectDiff, Path} from '@sanity/diff'
 import {resolveDiffComponent} from '../resolveDiffComponent'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {Annotation} from '../../../history/types'
 import {SchemaType} from '../types'
 import {getArrayItemDiffType, getDiffAtPath} from './helpers'
 import {ChangeNode} from './types'

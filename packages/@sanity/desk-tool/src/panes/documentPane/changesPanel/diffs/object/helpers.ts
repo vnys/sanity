@@ -1,5 +1,5 @@
 import {Diff, ObjectDiff, Path, FieldDiff, ItemDiff} from '@sanity/diff'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {Annotation} from '../../../history/types'
 import {ObjectField} from '../types'
 
 const toString = Object.prototype.toString

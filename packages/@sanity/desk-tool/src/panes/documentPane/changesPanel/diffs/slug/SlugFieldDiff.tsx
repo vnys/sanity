@@ -1,6 +1,6 @@
 import React from 'react'
 import {ObjectDiff, StringDiff} from '@sanity/diff'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {Annotation} from '../../../history/types'
 import {DiffComponent, SchemaType} from '../types'
 import {StringFieldDiff} from '../string/StringFieldDiff'
 

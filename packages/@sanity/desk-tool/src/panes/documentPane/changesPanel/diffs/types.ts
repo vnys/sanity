@@ -1,7 +1,7 @@
 import {ComponentType} from 'react'
 import {Diff} from '@sanity/diff'
-import {Annotation} from '../panes/documentPane/history/types'
-import {ArrayItemChangeNode} from '../panes/documentPane/changesPanel/types'
+import {Annotation} from '../../history/types'
+import {ArrayItemChangeNode} from '../../changesPanel/types'
 
 export type DiffComponent<T extends Diff<Annotation> = Diff<Annotation>> = ComponentType<
   DiffProps<T>

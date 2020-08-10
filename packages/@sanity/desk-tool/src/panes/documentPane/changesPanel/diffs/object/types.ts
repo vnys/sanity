@@ -1,5 +1,5 @@
 import {ArrayDiff, Diff, ItemDiff, Path} from '@sanity/diff'
-import {Annotation} from '../../panes/documentPane/history/types'
+import {Annotation} from '../../../history/types'
 import {SchemaType} from '../types'
 
 export interface GroupChangeNode {
