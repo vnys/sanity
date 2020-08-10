@@ -1,6 +1,8 @@
 import {useUserColorManager} from '@sanity/base'
 import {ItemDiff} from '@sanity/diff'
 import React from 'react'
+import {FallbackDiff} from '../_fallback/FallbackDiff'
+import {resolveDiffComponent} from '../resolveDiffComponent'
 import {Annotation} from '../../panes/documentPane/history/types'
 import {getAnnotationColor} from '../helpers'
 import {isPTSchemaType, PTDiff} from '../portableText'
@@ -18,29 +20,33 @@ export function ArrayFieldDiff(props: ArrayDiffProps) {
   return (
     <div className={styles.root}>
       <div className={styles.itemList}>
-        {props.diff.items.map((diffItem, diffItemIndex) => {
-          const color =
-            diffItem.type === 'added' || diffItem.type === 'removed'
-              ? getAnnotationColor(userColorManager, diffItem.annotation)
-              : null
+        {props.items &&
+          props.items.map((change, changeIndex) => {
+            const {diff} = change
 
-          return (
-            <div className={styles.diffItemContainer} key={diffItemIndex}>
-              <div
-                className={styles.diffItemIndexes}
-                style={color ? {background: color.bg, color: color.fg} : {}}
-              >
-                <ArrayDiffIndexes fromIndex={diffItem.fromIndex} toIndex={diffItem.toIndex} />
+            const color =
+              diff.type === 'added' || diff.type === 'removed'
+                ? getAnnotationColor(userColorManager, diff.annotation)
+                : null
+
+            return (
+              <div className={styles.diffItemContainer} key={String(changeIndex)}>
+                <div
+                  className={styles.diffItemIndexes}
+                  style={color ? {background: color.bg, color: color.fg} : {}}
+                >
+                  <ArrayDiffIndexes fromIndex={diff.fromIndex} toIndex={diff.toIndex} />
+                </div>
+                <div className={styles.diffItemBox}>
+                  <DefaultArrayDiffItem
+                    diff={diff}
+                    fromType={change.fromType}
+                    toType={change.toType}
+                  />
+                </div>
               </div>
-              <div className={styles.diffItemBox}>
-                <DefaultArrayDiffItem
-                  diff={diffItem}
-                  metadata={props.items && props.items[diffItemIndex]}
-                />
-              </div>
-            </div>
-          )
-        })}
+            )
+          })}
       </div>
     </div>
   )
@@ -102,34 +108,37 @@ function ArrayDiffIndexes({fromIndex, toIndex}: {fromIndex?: number; toIndex?: n
 // eslint-disable-next-line complexity
 function DefaultArrayDiffItem(props: {
   diff: ItemDiff<Annotation>
-  metadata?: {fromType?: {name: string}; toType?: {name: string}}
+  fromType?: {name: string}
+  toType?: {name: string}
 }) {
-  const {diff} = props
-  const metadata = props.metadata || {fromType: undefined, toType: undefined}
+  const {diff, fromType, toType} = props
 
   if (diff.type === 'added') {
     return (
       <pre className={styles.addedItem}>
-        Added array item ({metadata.toType && metadata.toType.name}):{' '}
-        {JSON.stringify(diff, null, 2)}
+        Added array item ({toType && toType.name}): {JSON.stringify(diff, null, 2)}
       </pre>
     )
   }
 
   if (diff.type === 'changed') {
+    const DiffComponent = (toType && resolveDiffComponent(toType as any)) || FallbackDiff
+
+    console.log('array item changed', diff.diff, toType)
+
     return (
-      <pre className={styles.changedItem}>
-        Changed array item ({metadata.fromType && metadata.fromType.name}&rarr;
-        {metadata.toType && metadata.toType.name}): {JSON.stringify(diff, null, 2)}
-      </pre>
+      <DiffComponent diff={diff.diff} schemaType={toType as any} />
+      // <pre className={styles.changedItem}>
+      //   Changed array item ({fromType && fromType.name}&rarr;
+      //   {toType && toType.name}): {JSON.stringify(diff, null, 2)}
+      // </pre>
     )
   }
 
   if (diff.type === 'removed') {
     return (
       <pre className={styles.removedItem}>
-        Removed array item ({metadata.fromType && metadata.fromType.name}):{' '}
-        {JSON.stringify(diff, null, 2)}
+        Removed array item ({fromType && fromType.name}): {JSON.stringify(diff, null, 2)}
       </pre>
     )
   }
@@ -137,7 +146,7 @@ function DefaultArrayDiffItem(props: {
   // @todo: render moved items?
   return (
     <pre className={styles.item}>
-      Unchanged item ({metadata.toType && metadata.toType.name}): {JSON.stringify(diff, null, 2)}
+      Unchanged item ({toType && toType.name}): {JSON.stringify(diff, null, 2)}
     </pre>
   )
 }

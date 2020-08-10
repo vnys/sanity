@@ -1,6 +1,7 @@
 import {ComponentType} from 'react'
 import {Diff} from '@sanity/diff'
 import {Annotation} from '../panes/documentPane/history/types'
+import {ArrayItemChangeNode} from '../panes/documentPane/changesPanel/types'
 
 export type DiffComponent<T extends Diff<Annotation> = Diff<Annotation>> = ComponentType<
   DiffProps<T>
@@ -9,7 +10,7 @@ export type DiffComponent<T extends Diff<Annotation> = Diff<Annotation>> = Compo
 export type DiffProps<T extends Diff<Annotation> = Diff<Annotation>> = {
   diff: T
   schemaType: SchemaType<T>
-  items?: {fromType?: {name: string}; toType?: {name: string}}[]
+  items?: ArrayItemChangeNode[]
 }
 
 export interface ObjectField {

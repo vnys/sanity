@@ -3,7 +3,7 @@ import {ObjectDiff, Path} from '@sanity/diff'
 import {resolveDiffComponent} from '../../../diffs/resolveDiffComponent'
 import {Annotation} from '../history/types'
 import {SchemaType} from '../types'
-import {getArrayDiffItemTypes, getDiffAtPath} from './helpers'
+import {getArrayItemDiffType, getDiffAtPath} from './helpers'
 import {ChangeNode} from './types'
 
 // eslint-disable-next-line complexity
@@ -62,7 +62,15 @@ export function buildChangeList(
           path: fieldPath,
           titlePath: fieldTitlePath,
           schemaType: field.type,
-          items: getArrayDiffItemTypes(fieldDiff, field as any)
+          items: fieldDiff.items.map(fieldDiffItem => {
+            return {
+              type: 'arrayItem',
+              ...getArrayItemDiffType(fieldDiffItem, field),
+              diff: fieldDiffItem,
+              key: pathToString(fieldPath),
+              path: fieldPath
+            }
+          })
         })
       }
     } else {
