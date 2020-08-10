@@ -146,8 +146,8 @@ export function RegionsWithIntersections(props: Props) {
         style={{
           zIndex: 100,
           position: 'sticky',
-          top: margins[0],
-          height: 1,
+          top: margins[0] - 1,
+          height: 2,
           backgroundColor: DEBUG ? 'red' : 'none'
         }}
       />
@@ -182,8 +182,8 @@ export function RegionsWithIntersections(props: Props) {
         onIntersection={onIntersection}
         style={{
           position: 'sticky',
-          bottom: 0,
-          height: 1,
+          bottom: -1,
+          height: 2,
           backgroundColor: DEBUG ? 'blue' : 'none'
         }}
       />
