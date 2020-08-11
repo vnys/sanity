@@ -118,6 +118,7 @@ const isTSProject = packageDir => {
 // another package in this monorepo it might help adding it to this array
 const BUILD_SERIALLY = [
   ['packages/@sanity/components'],
+  ['packages/@sanity/react-hooks'],
   ['packages/@sanity/transaction-collator', 'packages/@sanity/mutator', 'packages/@sanity/base']
 ]
 
